@@ -19,6 +19,15 @@ YEAR=${2:-$CURRENT_YEAR}   # Use $2 if provided, otherwise use CURRENT_YEAR
 
 echo "Starting Advent of Code setup for $YEAR Day $DAY..."
 
+# --- NEW STEP: Create necessary year directories if they don't exist ---
+YEAR_INPUT_DIR="src/$YEAR/input"
+YEAR_DAYS_DIR="src/$YEAR/days"
+
+echo "-> Ensuring directories exist: $YEAR_INPUT_DIR and $YEAR_DAYS_DIR"
+mkdir -p "$YEAR_INPUT_DIR" "$YEAR_DAYS_DIR"
+# The '-p' flag ensures that parent directories (like src/YEAR) are created
+# and suppresses errors if the directories already exist.
+
 # 2. Run the Kotlin Script via Gradle
 echo "-> Fetching input and creating Kotlin file..."
 # We pass -Pday and -Pyear to the Gradle task
@@ -44,17 +53,17 @@ echo "-> Adding new files to Git staging area..."
 # Assuming the file structure created by the Kotlin script:
 # src/YEAR/days/Day_XX.kt
 # src/YEAR/input/day_XX.txt
-git add "src/$YEAR/days/Day_$DAY.kt"
-git add "src/$YEAR/input/day_$DAY.txt"
-# Also adding the newly created year directories if they didn't exist
-git add "src/$YEAR/days"
-git add "src/$YEAR/input"
+git add "$YEAR_DAYS_DIR/Day_$DAY.kt"
+git add "$YEAR_INPUT_DIR/day_$DAY.txt"
+# We no longer need to explicitly add the directories, but we'll add the
+# base folders to ensure Git tracks them correctly if they were just created.
+git add "$YEAR_DAYS_DIR"
+git add "$YEAR_INPUT_DIR"
 
 # 4. Create the Commit Message
 COMMIT_MESSAGE="aoc-$YEAR-$DAY: setup"
 echo "-> Creating commit: '$COMMIT_MESSAGE'"
 git commit -m "$COMMIT_MESSAGE"
-git push origin $TARGET_BRANCH
 
 echo "✨ Setup complete. Branch '$TARGET_BRANCH' created/checked out and commit created successfully."
 echo "   Run 'git log' to confirm."
