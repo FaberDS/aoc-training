@@ -1,0 +1,93 @@
+name: Advent of Code Daily Setup
+
+# Runs every day from Dec 1st to Dec 12th at 6:00 AM CET (5:00 AM UTC)
+on:
+  schedule:
+    # 0 5 1-12 12 * -> Minute 0, Hour 5 (UTC), Days 1 through 12, Month 12 (December)
+    - cron: '0 5 1-12 12 *'
+
+  # Allows manual triggering with inputs for fixed day/year testing
+  workflow_dispatch:
+    inputs:
+      aoc_day:
+        description: 'AoC Day (e.g., 3). Leave blank for current day/scheduled run.'
+        required: false
+        default: ''
+      aoc_year:
+        description: 'AoC Year (e.g., 2023). Leave blank for current year/scheduled run.'
+        required: false
+        default: ''
+
+jobs:
+  setup_day:
+    runs-on: ubuntu-latest
+
+    # Only run this job between Dec 1st and Dec 12th, inclusive.
+    # Note: I have kept your original complex condition here for fidelity,
+    # but the logic for determining the day/year is now inside the step.
+    if: github.event_name == 'workflow_dispatch' || (github.event.schedule && (now() > fromJSON('{"1":1,"2":1,"3":1,"4":1,"5":1,"6":1,"7":1,"8":1,"9":1,"10":1,"11":1,"12":1}')[format(github.event.schedule, 'DD')]))
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # Required to push the new branch/commit
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK 17 (Required for modern Gradle/Kotlin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Create .env file with AoC Token
+        run: echo "AOC_SESSION_COOKIE='${{ secrets.AOC_SESSION_COOKIE }}'" > .env
+        shell: bash
+
+      - name: Determine Current Day and Year
+        id: date_vars
+        run: |
+          # Default to current date/year
+          DEFAULT_DAY=$((10#$(date +%d)))
+          DEFAULT_YEAR=$(date +%Y)
+          
+          # Check if manual inputs were provided
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.aoc_day }}" ]; then
+            # Use provided DAY input, ensuring it's treated as a number
+            CURRENT_DAY=$((10#${{ github.event.inputs.aoc_day }}))
+          else
+            CURRENT_DAY=$DEFAULT_DAY
+          fi
+          
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.aoc_year }}" ]; then
+            # Use provided YEAR input
+            CURRENT_YEAR=${{ github.event.inputs.aoc_year }}
+          else
+            CURRENT_YEAR=$DEFAULT_YEAR
+          fi
+          
+          # Output variables for subsequent steps
+          echo "CURRENT_DAY=$CURRENT_DAY" >> $GITHUB_OUTPUT
+          echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_OUTPUT
+          echo "Determined Day: $CURRENT_DAY, Year: $CURRENT_YEAR"
+
+      - name: Execute Setup Script and Commit
+        run: |
+          chmod +x scripts/setup.sh
+          # Pass the determined DAY and YEAR to the shell script
+          ./scripts/setup.sh ${{ steps.date_vars.outputs.CURRENT_DAY }} ${{ steps.date_vars.outputs.CURRENT_YEAR }}
+
+      - name: Push the New Branch
+        run: |
+          BRANCH_NAME="aoc/${{ steps.date_vars.outputs.CURRENT_YEAR }}/${{ steps.date_vars.outputs.CURRENT_DAY }}"
+          echo "Pushing branch $BRANCH_NAME..."
+          git push origin $BRANCH_NAME
