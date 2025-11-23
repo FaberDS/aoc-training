@@ -3,28 +3,60 @@ import java.net.URL
 import java.util.*
 
 // --- CONFIGURATION ---
-const val AOC_YEAR = 2024
+// AOC_YEAR is now a variable passed to main and functions.
 const val AOC_INPUT_BASE_URL = "https://adventofcode.com"
-const val BASE_PATH = "src/2024/input"
 const val ENV_FILE_PATH = ".env"
 // ---------------------
 
 /**
- * Manually parses a simple .env file to load key-value pairs.
+ * The template content for the new Kotlin solution file.
+ * The @@ variables are placeholders replaced in createKotlinFile().
  */
+val KOTLIN_TEMPLATE = """
+/**
+ * Advent of code (@@AOC_YEAR@@) solution for day @@DAY_NUM@@ by Denis Schüle.
+ * [Advent of code @@AOC_YEAR@@-@@DAY_NUM@@ ](https://adventofcode.com/@@AOC_YEAR@@/day/@@DAY_NUM@@)
+ **/
+
+fun main() {
+    fun part1(input: List<String>): Int {
+        return 0
+    }
+
+    fun part2(input: List<String>): Int {
+        return 0
+    }
+    try {
+        // Reads input from the file src/@@AOC_YEAR@@/input/day_@@DAY_NUM_PADDED@@.txt
+        // The required resource name ("dayXX") and year are now injected directly.
+        // NOTE: You need to implement or import the readInput function.
+        val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+
+        val part1_solution = part1(input)
+        println("Part 1: ${"$"}{part1_solution}") 
+//        check(part1_solution == 1)
+
+        val part2_solution = part2(input)
+
+        println("Part 2: ${"$"}{part2_solution}") 
+//        check(part2_solution == 1)
+
+    } catch (t: Throwable) {
+        t.printStackTrace()
+        throw t
+    }
+}
+"""
+
 fun loadEnvFile(path: String): Map<String, String> {
     val envMap = mutableMapOf<String, String>()
     try {
         File(path).forEachLine { line ->
-            // Trim whitespace, skip comments and blank lines
             val trimmedLine = line.trim()
             if (trimmedLine.isBlank() || trimmedLine.startsWith('#')) return@forEachLine
-
-            // Simple key=value parsing
             val parts = trimmedLine.split('=', limit = 2)
             if (parts.size == 2) {
                 val key = parts[0].trim()
-                // Remove surrounding quotes and trim
                 val value = parts[1].trim().trim { it == '"' || it == '\'' }
                 envMap[key] = value
             }
@@ -35,26 +67,28 @@ fun loadEnvFile(path: String): Map<String, String> {
     return envMap
 }
 
-fun fetchInputAndSave(day: Int, sessionCookieValue: String) {
+fun fetchInputAndSave(day: Int, year: Int, sessionCookieValue: String): Boolean {
     if (sessionCookieValue.isBlank()) {
         println("ERROR: AOC_SESSION_COOKIE is empty. Please set your session cookie in the .env file.")
-        return
+        return false
     }
 
     val dayPadded = String.format("%02d", day)
-    val urlString = "$AOC_INPUT_BASE_URL/$AOC_YEAR/day/$day/input"
+    val urlString = "$AOC_INPUT_BASE_URL/$year/day/$day/input"
+
+    // Dynamically calculate paths based on the year
+    val INPUT_PATH = "src/$year/input"
+    // Input filename remains day_XX.txt (correct)
     val outputFileName = "day_$dayPadded.txt"
-    val outputPath = File(BASE_PATH, outputFileName)
+    val outputPath = File(INPUT_PATH, outputFileName)
 
     try {
-        println("Fetching input for Day $day...")
+        println("Fetching input for Day $day, Year $year...")
         val url = URL(urlString)
 
-        // Open connection and set the session cookie
         val connection = url.openConnection()
         connection.setRequestProperty("Cookie", "session=$sessionCookieValue")
 
-        // Read the input content
         val inputStream = connection.getInputStream()
         val scanner = Scanner(inputStream).useDelimiter("\\A")
         val inputContent = if (scanner.hasNext()) scanner.next() else ""
@@ -63,28 +97,56 @@ fun fetchInputAndSave(day: Int, sessionCookieValue: String) {
             println("WARNING: Fetched empty input. Check the day number and your session cookie.")
         }
 
-        // Ensure the directory exists
         outputPath.parentFile.mkdirs()
-
-        // Write the content to the file
         outputPath.writeText(inputContent.trim())
 
         println("✅ Successfully saved input for Day $day to: ${outputPath.path}")
+        return true
 
     } catch (e: Exception) {
-        println("❌ Failed to fetch or save input for Day $day.")
+        println("❌ Failed to fetch or save input for Day $day, Year $year.")
         println("Error: ${e.message}")
-        // Detailed stack trace is suppressed for brevity unless necessary
+        return false
     }
 }
 
+fun createKotlinFile(day: Int, year: Int) {
+    val dayPadded = String.format("%02d", day)
+    val dayNum = day.toString()
+
+    // Dynamically calculate path based on the year
+    val DAYS_PATH = "src/$year/days"
+
+    // FIX APPLIED HERE: Added the underscore to match the requested format Day_02.kt
+    val outputFileName = "Day_$dayPadded.kt"
+    val outputPath = File(DAYS_PATH, outputFileName)
+
+    if (outputPath.exists()) {
+        println("⚠️ Solution file already exists: ${outputPath.path}")
+        return
+    }
+
+    // Perform replacements
+    val content = KOTLIN_TEMPLATE
+        .replace("@@DAY_NUM_PADDED@@", dayPadded)
+        .replace("@@DAY_NUM@@", dayNum)
+        .replace("@@AOC_YEAR@@", year.toString()) // Inject the year
+        .trim()
+
+    outputPath.parentFile.mkdirs()
+    outputPath.writeText(content)
+
+    println("📝 Successfully created solution file: ${outputPath.path}")
+}
+
 fun main(args: Array<String>) {
-    // 1. Load environment variables
     val env = loadEnvFile(ENV_FILE_PATH)
     val sessionCookie = env["AOC_SESSION_COOKIE"] ?: ""
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-    // 2. Determine the day number
+    // --- 1. Determine Day ---
     val day = when {
+        // Check for the day argument (position 0)
         args.isNotEmpty() -> args[0].toIntOrNull()
         else -> {
             print("Please enter the Advent of Code day number (1-25): ")
@@ -92,9 +154,24 @@ fun main(args: Array<String>) {
         }
     }
 
-    // 3. Fetch input
+    // --- 2. Determine Year ---
+    val year = when {
+        // Check for the year argument (position 1)
+        args.size > 1 -> args[1].toIntOrNull() ?: currentYear
+        else -> {
+            print("Please enter the Advent of Code year (default: $currentYear): ")
+            readLine()?.toIntOrNull() ?: currentYear
+        }
+    }
+
+    // 3. Execute
     when (day) {
-        in 1..25 -> fetchInputAndSave(day!!, sessionCookie)
+        in 1..25 -> {
+            val success = fetchInputAndSave(day!!, year, sessionCookie)
+            if (success) {
+                createKotlinFile(day, year)
+            }
+        }
         else -> println("Invalid day number. Please enter a number between 1 and 25.")
     }
 }

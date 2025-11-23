@@ -9,17 +9,20 @@ sourceSets {
 }
 
 
+
 tasks.register<JavaExec>("fetchInput") {
     mainClass.set("Fetch_inputKt")
 
     classpath = sourceSets["main"].runtimeClasspath
-
     standardInput = System.`in`
-    args(project.properties["day"] as? String)
+
+    val dayArg = project.properties["day"] as? String
+    val yearArg = project.properties["year"] as? String
+
+    args(listOf(dayArg, yearArg).filterNotNull())
 
     workingDir = project.rootDir
 }
-
 tasks {
     wrapper {
         gradleVersion = "8.11.1"
