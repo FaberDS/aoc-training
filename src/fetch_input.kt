@@ -1,4 +1,5 @@
 import java.io.File
+import java.net.URI
 import java.net.URL
 import java.util.*
 
@@ -84,7 +85,7 @@ fun fetchInputAndSave(day: Int, year: Int, sessionCookieValue: String): Boolean 
 
     try {
         println("Fetching input for Day $day, Year $year...")
-        val url = URL(urlString)
+        val url =  URI(urlString).toURL()
 
         val connection = url.openConnection()
         connection.setRequestProperty("Cookie", "session=$sessionCookieValue")
