@@ -22,6 +22,10 @@ jobs:
   setup_day:
     runs-on: ubuntu-latest
 
+    # CRITICAL FIX: Add write permissions for the GITHUB_TOKEN so the bot can push the new branch.
+    permissions:
+      contents: write
+
     # Run only if triggered manually OR by schedule.
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
 
