@@ -20,6 +20,9 @@ val KOTLIN_TEMPLATE = """
  **/
 
 fun main() {
+
+    val exampleSolution = 0 
+    
     fun part1(input: List<String>): Int {
         return 0
     }
@@ -27,9 +30,18 @@ fun main() {
     fun part2(input: List<String>): Int {
         return 0
     }
+
     try {
+    
+        // --- TEST DEMO INPUT ---
+        val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
+        val part1_demo_solution = part1(exampleInput)
+        println("Part 1 Demo: ${"$"}{part1_demo_solution}") 
+        // check(part1_demo_solution == exampleSolution)
+        
+        
+        // --- RUN FULL INPUT ---
         // Reads input from the file src/@@AOC_YEAR@@/input/day_@@DAY_NUM_PADDED@@.txt
-        // The required resource name ("dayXX") and year are now injected directly.
         // NOTE: You need to implement or import the readInput function.
         val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
 
@@ -79,13 +91,15 @@ fun fetchInputAndSave(day: Int, year: Int, sessionCookieValue: String): Boolean 
 
     // Dynamically calculate paths based on the year
     val INPUT_PATH = "src/$year/input"
-    // Input filename remains day_XX.txt (correct)
+    // Input filename: day_XX.txt (correct)
     val outputFileName = "day_$dayPadded.txt"
     val outputPath = File(INPUT_PATH, outputFileName)
 
     try {
         println("Fetching input for Day $day, Year $year...")
-        val url =  URI(urlString).toURL()
+
+        // Use URI to create the URL, avoiding the deprecated constructor (Warning fix)
+        val url = URI(urlString).toURL()
 
         val connection = url.openConnection()
         connection.setRequestProperty("Cookie", "session=$sessionCookieValue")
@@ -117,27 +131,38 @@ fun createKotlinFile(day: Int, year: Int) {
 
     // Dynamically calculate path based on the year
     val DAYS_PATH = "src/$year/days"
+    val INPUT_PATH = "src/$year/input"
 
-    // FIX APPLIED HERE: Added the underscore to match the requested format Day_02.kt
+    // Output file name: Day_02.kt
     val outputFileName = "Day_$dayPadded.kt"
     val outputPath = File(DAYS_PATH, outputFileName)
 
+    // Demo input file name: day_02_demo.txt
+    val demoFileName = "day_${dayPadded}_demo.txt"
+    val demoOutputPath = File(INPUT_PATH, demoFileName)
+
+
     if (outputPath.exists()) {
         println("⚠️ Solution file already exists: ${outputPath.path}")
-        return
+    } else {
+        // Perform replacements
+        val content = KOTLIN_TEMPLATE
+            .replace("@@DAY_NUM_PADDED@@", dayPadded)
+            .replace("@@DAY_NUM@@", dayNum)
+            .replace("@@AOC_YEAR@@", year.toString()) // Inject the year
+            .trim()
+
+        outputPath.parentFile.mkdirs()
+        outputPath.writeText(content)
+
+        println("📝 Successfully created solution file: ${outputPath.path}")
     }
 
-    // Perform replacements
-    val content = KOTLIN_TEMPLATE
-        .replace("@@DAY_NUM_PADDED@@", dayPadded)
-        .replace("@@DAY_NUM@@", dayNum)
-        .replace("@@AOC_YEAR@@", year.toString()) // Inject the year
-        .trim()
-
-    outputPath.parentFile.mkdirs()
-    outputPath.writeText(content)
-
-    println("📝 Successfully created solution file: ${outputPath.path}")
+    // Create the empty demo file if it doesn't exist
+    if (!demoOutputPath.exists()) {
+        demoOutputPath.writeText("# Add your demo input here\n")
+        println("📝 Successfully created demo input file: ${demoOutputPath.path}")
+    }
 }
 
 fun main(args: Array<String>) {
@@ -169,9 +194,8 @@ fun main(args: Array<String>) {
     when (day) {
         in 1..25 -> {
             val success = fetchInputAndSave(day!!, year, sessionCookie)
-            if (success) {
-                createKotlinFile(day, year)
-            }
+            // Even if fetch fails, we still create the Kotlin file and demo file for manual setup
+            createKotlinFile(day, year)
         }
         else -> println("Invalid day number. Please enter a number between 1 and 25.")
     }

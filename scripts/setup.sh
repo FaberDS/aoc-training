@@ -19,10 +19,11 @@ YEAR=${2:-$CURRENT_YEAR}   # Use $2 if provided, otherwise use CURRENT_YEAR
 
 echo "Starting Advent of Code setup for $YEAR Day $DAY..."
 
-# --- NEW STEP: Create necessary year directories if they don't exist ---
+# --- 1. Define Paths ---
 YEAR_INPUT_DIR="src/$YEAR/input"
 YEAR_DAYS_DIR="src/$YEAR/days"
 
+# --- NEW STEP: Create necessary year directories if they don't exist ---
 echo "-> Ensuring directories exist: $YEAR_INPUT_DIR and $YEAR_DAYS_DIR"
 mkdir -p "$YEAR_INPUT_DIR" "$YEAR_DAYS_DIR"
 # The '-p' flag ensures that parent directories (like src/YEAR) are created
@@ -60,8 +61,11 @@ echo "-> Adding new files to Git staging area..."
 # src/YEAR/days/Day_XX.kt
 # src/YEAR/input/day_XX.txt
 git add "$YEAR_DAYS_DIR/Day_$DAY.kt"
-# NEW FIX 2: Force add the input file to override .gitignore
+# Force add the input file to override .gitignore
 git add -f "$YEAR_INPUT_DIR/day_$DAY.txt"
+# ADD NEW FILE: Force add the demo input file (day_XX_demo.txt)
+git add -f "$YEAR_INPUT_DIR/day_${DAY}_demo.txt"
+
 # We no longer need to explicitly add the directories, but we'll add the
 # base folders to ensure Git tracks them correctly if they were just created.
 git add "$YEAR_DAYS_DIR"
