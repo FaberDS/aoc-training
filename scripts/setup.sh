@@ -54,6 +54,7 @@ git add "src/$YEAR/input"
 COMMIT_MESSAGE="aoc-$YEAR-$DAY: setup"
 echo "-> Creating commit: '$COMMIT_MESSAGE'"
 git commit -m "$COMMIT_MESSAGE"
+git push origin $TARGET_BRANCH
 
 echo "✨ Setup complete. Branch '$TARGET_BRANCH' created/checked out and commit created successfully."
 echo "   Run 'git log' to confirm."
