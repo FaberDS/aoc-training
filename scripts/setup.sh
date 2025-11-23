@@ -48,13 +48,20 @@ echo "-> Creating and switching to branch: $TARGET_BRANCH"
 # if the branch already exists, meaning we stay on that branch.
 git checkout -b "$TARGET_BRANCH"
 
+# NEW FIX 1: Set Git identity for the bot user
+echo "-> Setting Git identity for commit..."
+git config user.email "github-actions[bot]@users.noreply.github.com"
+git config user.name "GitHub Actions Bot"
+
+
 # 3. Add Files to Git
 echo "-> Adding new files to Git staging area..."
 # Assuming the file structure created by the Kotlin script:
 # src/YEAR/days/Day_XX.kt
 # src/YEAR/input/day_XX.txt
 git add "$YEAR_DAYS_DIR/Day_$DAY.kt"
-git add "$YEAR_INPUT_DIR/day_$DAY.txt"
+# NEW FIX 2: Force add the input file to override .gitignore
+git add -f "$YEAR_INPUT_DIR/day_$DAY.txt"
 # We no longer need to explicitly add the directories, but we'll add the
 # base folders to ensure Git tracks them correctly if they were just created.
 git add "$YEAR_DAYS_DIR"
@@ -65,5 +72,4 @@ COMMIT_MESSAGE="aoc-$YEAR-$DAY: setup"
 echo "-> Creating commit: '$COMMIT_MESSAGE'"
 git commit -m "$COMMIT_MESSAGE"
 
-echo "✨ Setup complete. Branch '$TARGET_BRANCH' created/checked out and commit created successfully."
-echo "   Run 'git log' to confirm."
+echo "✨ Setup complete. Commit created successfully. Run 'git log' to confirm."
