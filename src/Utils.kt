@@ -34,3 +34,14 @@ fun splitInput(input: List<String>): Pair<List<Int>,List<Int>> {
     }
     return Pair(list1, list2)
 }
+
+/**
+ * Split input string by spaces into int list
+ */
+fun splitInputToIntList(input: List<String>): List<List<Int>> {
+    return input.map { line ->
+        line.split(" ")
+            .filter { it.isNotBlank() }
+            .map { it.toInt() }
+    }
+}
