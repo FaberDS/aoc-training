@@ -35,30 +35,32 @@ fun main() {
 
     try {
     
-        // --- TEST DEMO INPUT ---
+        /* --- TEST DEMO INPUT --- */
         val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         val part1_demo_solution = part1(exampleInput)
         "Part 1 Demo".printSeparated()
         println("- Part 1 Demo: ${"$"}{part1_demo_solution}") 
         // check(part1_demo_solution == exampleSolution1)
-        val part2_demo_solution = part2(exampleInput)
-        "Part 2 Demo".printSeparated()
-        println("- Part 2 Demo: ${"$"}{part2_demo_solution}") 
-        // check(part2_demo_solution == exampleSolution2)
         
-        // --- RUN FULL INPUT ---
-        // Reads input from the file src/@@AOC_YEAR@@/input/day_@@DAY_NUM_PADDED@@.txt
-        // NOTE: You need to implement or import the readInput function.
+        
+//        "Part 2 Demo".printSeparated()
+//        val part2_demo_solution = part2(exampleInput)
+//        println("- Part 2 Demo: ${"$"}{part2_demo_solution}") 
+//        check(part2_demo_solution == exampleSolution2)
+        
+        /* --- RUN FULL INPUT ---
+            Reads input from the file src/@@AOC_YEAR@@/input/day_@@DAY_NUM_PADDED@@.txt
+            NOTE: You need to implement or import the readInput function. */
         val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
 
-        val part1_solution = part1(input)
-        "Part 1".printSeparated()
-        println("- Part 1: ${"$"}{part1_solution}") 
+//        val part1_solution = part1(input)
+//        "Part 1".printSeparated()
+//        println("- Part 1: ${"$"}{part1_solution}") 
 //        check(part1_solution == 1)
 
-        val part2_solution = part2(input)
-        "Part 2".printSeparated()
-        println("- Part 2: ${"$"}{part2_solution}") 
+//        val part2_solution = part2(input)
+//        "Part 2".printSeparated()
+//        println("- Part 2: ${"$"}{part2_solution}") 
 //        check(part2_solution == 1)
 
     } catch (t: Throwable) {
