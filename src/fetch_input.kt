@@ -1,6 +1,5 @@
 import java.io.File
 import java.net.URI
-import java.net.URL
 import java.util.*
 
 // --- CONFIGURATION ---
@@ -40,11 +39,11 @@ fun main() {
         val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         val part1_demo_solution = part1(exampleInput)
         "Part 1 Demo".printSeparated()
-        println("Part 1 Demo: ${"$"}{part1_demo_solution}") 
+        println("- Part 1 Demo: ${"$"}{part1_demo_solution}") 
         // check(part1_demo_solution == exampleSolution1)
         val part2_demo_solution = part2(exampleInput)
         "Part 2 Demo".printSeparated()
-        println("Part 2 Demo: ${"$"}{part2_demo_solution}") 
+        println("- Part 2 Demo: ${"$"}{part2_demo_solution}") 
         // check(part2_demo_solution == exampleSolution2)
         
         // --- RUN FULL INPUT ---
@@ -54,12 +53,12 @@ fun main() {
 
         val part1_solution = part1(input)
         "Part 1".printSeparated()
-        println("Part 1: ${"$"}{part1_solution}") 
+        println("- Part 1: ${"$"}{part1_solution}") 
 //        check(part1_solution == 1)
 
         val part2_solution = part2(input)
         "Part 2".printSeparated()
-        println("Part 2: ${"$"}{part2_solution}") 
+        println("- Part 2: ${"$"}{part2_solution}") 
 //        check(part2_solution == 1)
 
     } catch (t: Throwable) {
@@ -84,6 +83,7 @@ fun loadEnvFile(path: String): Map<String, String> {
         }
     } catch (e: Exception) {
         println("Warning: Could not read $path. Make sure the file exists.")
+        println(e.printStackTrace())
     }
     return envMap
 }
@@ -202,8 +202,9 @@ fun main(args: Array<String>) {
     when (day) {
         in 1..25 -> {
             val success = fetchInputAndSave(day!!, year, sessionCookie)
-            // Even if fetch fails, we still create the Kotlin file and demo file for manual setup
-            createKotlinFile(day, year)
+            if (success) {
+                createKotlinFile(day, year)
+            }
         }
         else -> println("Invalid day number. Please enter a number between 1 and 25.")
     }
