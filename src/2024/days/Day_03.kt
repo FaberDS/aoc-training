@@ -7,11 +7,22 @@
 
 fun main() {
 
-    val exampleSolution1 = 0 
+    val exampleSolution1 = 161
     val exampleSolution2 = 0 
     
     fun part1(input: List<String>): Int {
-        return 0
+        val regex = Regex("""mul\((\d{1,3}),(\d{1,3})\)""")
+        var sum = 0
+        for (line in input) {
+            val match = regex.findAll(line)
+                match.forEach {
+                    val (x, y) = it.destructured
+                    sum += x.toInt() * y.toInt()
+                    println("$x $y $sum")
+                }
+
+        }
+        return sum
     }
 
     fun part2(input: List<String>): Int {
@@ -25,28 +36,29 @@ fun main() {
         val part1_demo_solution = part1(exampleInput)
         "Part 1 Demo".printSeparated()
         println("- Part 1 Demo: ${part1_demo_solution}") 
-        // check(part1_demo_solution == exampleSolution1)
+         check(part1_demo_solution == exampleSolution1)
         val part2_demo_solution = part2(exampleInput)
         "Part 2 Demo".printSeparated()
-        println("- Part 2 Demo: ${part2_demo_solution}") 
-        // check(part2_demo_solution == exampleSolution2)
+        println("- Part 2 Demo: ${part2_demo_solution}")
+         check(part2_demo_solution == exampleSolution2)
         
-        // --- RUN FULL INPUT ---
-        // Reads input from the file src/2024/input/day_03.txt
-        // NOTE: You need to implement or import the readInput function.
+//         --- RUN FULL INPUT ---
+//         Reads input from the file src/2024/input/day_03.txt
+//         NOTE: You need to implement or import the readInput function.
         val input = readInput("day_03", "2024")
 
         val part1_solution = part1(input)
         "Part 1".printSeparated()
-        println("- Part 1: ${part1_solution}") 
-//        check(part1_solution == 1)
-
-        val part2_solution = part2(input)
-        "Part 2".printSeparated()
-        println("- Part 2: ${part2_solution}") 
-//        check(part2_solution == 1)
+        println("- Part 1: ${part1_solution}")
+        check(part1_solution == 155955228)
+//
+//        val part2_solution = part2(input)
+//        "Part 2".printSeparated()
+//        println("- Part 2: ${part2_solution}")
+//        check(part2_solution == 100189366)
 
     } catch (t: Throwable) {
+        t.println()
         t.printStackTrace()
         throw t
     }
