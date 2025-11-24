@@ -1,3 +1,4 @@
+import extensions.printSeparated
 import kotlin.math.abs
 
 /**
@@ -85,9 +86,11 @@ fun main() {
         // --- TEST DEMO INPUT ---
         val exampleInput = readInput("day_02_demo", "2024")
         val part1_demo_solution = part1(exampleInput)
+        "Part 1 Demo".printSeparated()
         println("Part 1 Demo: ${part1_demo_solution}")
         check(part1_demo_solution == exampleSolution1)
         val part2_demo_solution = part2(exampleInput)
+        "Part 2 Demo".printSeparated()
         println("Part 2 Demo: ${part2_demo_solution}")
         check(part2_demo_solution == exampleSolution2)
 
@@ -95,11 +98,13 @@ fun main() {
         val input = readInput("day_02", "2024")
 
         val part1_solution = part1(input)
+        "Part 1".printSeparated()
         println("Part 1: ${part1_solution}")
         check(part1_solution == 549)
 
         val part2_solution = part2(input)
 
+        "Part 2".printSeparated()
         println("Part 2: ${part2_solution}")
         check(part2_solution == 589)
 

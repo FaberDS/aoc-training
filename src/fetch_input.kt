@@ -18,10 +18,13 @@ val KOTLIN_TEMPLATE = """
  * Advent of code (@@AOC_YEAR@@) solution for day @@DAY_NUM@@ by Denis Schüle.
  * [Advent of code @@AOC_YEAR@@-@@DAY_NUM@@ ](https://adventofcode.com/@@AOC_YEAR@@/day/@@DAY_NUM@@)
  **/
+ import extensions.printSeparated
+
 
 fun main() {
 
-    val exampleSolution = 0 
+    val exampleSolution1 = 0 
+    val exampleSolution2 = 0 
     
     fun part1(input: List<String>): Int {
         return 0
@@ -36,9 +39,13 @@ fun main() {
         // --- TEST DEMO INPUT ---
         val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         val part1_demo_solution = part1(exampleInput)
+        "Part 1 Demo".printSeparated()
         println("Part 1 Demo: ${"$"}{part1_demo_solution}") 
-        // check(part1_demo_solution == exampleSolution)
-        
+        // check(part1_demo_solution == exampleSolution1)
+        val part2_demo_solution = part2(exampleInput)
+        "Part 2 Demo".printSeparated()
+        println("Part 2 Demo: ${"$"}{part2_demo_solution}") 
+        // check(part2_demo_solution == exampleSolution2)
         
         // --- RUN FULL INPUT ---
         // Reads input from the file src/@@AOC_YEAR@@/input/day_@@DAY_NUM_PADDED@@.txt
@@ -46,11 +53,12 @@ fun main() {
         val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
 
         val part1_solution = part1(input)
+        "Part 1".printSeparated()
         println("Part 1: ${"$"}{part1_solution}") 
 //        check(part1_solution == 1)
 
         val part2_solution = part2(input)
-
+        "Part 2".printSeparated()
         println("Part 2: ${"$"}{part2_solution}") 
 //        check(part2_solution == 1)
 
