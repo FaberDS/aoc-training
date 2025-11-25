@@ -8,7 +8,7 @@ const val AOC_INPUT_BASE_URL = "https://adventofcode.com"
 const val ENV_FILE_PATH = ".env"
 // ---------------------
 
-const val KOTLIN_TEMPLATE_FILE_PATH = "aoc_kotlin_template.txt"
+const val KOTLIN_TEMPLATE_FILE_PATH = "templates/aoc_kotlin_template.txt"
 // ---------------------
 
 // Remove the old val KOTLIN_TEMPLATE = """...""" block
