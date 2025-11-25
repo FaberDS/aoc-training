@@ -8,67 +8,25 @@ const val AOC_INPUT_BASE_URL = "https://adventofcode.com"
 const val ENV_FILE_PATH = ".env"
 // ---------------------
 
+const val KOTLIN_TEMPLATE_FILE_PATH = "aoc_kotlin_template.txt"
+// ---------------------
+
+// Remove the old val KOTLIN_TEMPLATE = """...""" block
+
 /**
- * The template content for the new Kotlin solution file.
- * The @@ variables are placeholders replaced in createKotlinFile().
+ * Loads the Kotlin template content from the external file.
  */
-val KOTLIN_TEMPLATE = """
-/**
- * Advent of code (@@AOC_YEAR@@) solution for day @@DAY_NUM@@ by Denis Schüle.
- * [Advent of code @@AOC_YEAR@@-@@DAY_NUM@@ ](https://adventofcode.com/@@AOC_YEAR@@/day/@@DAY_NUM@@)
- **/
- import extensions.printSeparated
-
-
-fun main() {
-
-    val exampleSolution1 = 0 
-    val exampleSolution2 = 0 
-    
-    fun part1(input: List<String>): Int {
-        return 0
-    }
-
-    fun part2(input: List<String>): Int {
-        return 0
-    }
-
-    try {
-    
-        /* --- TEST DEMO INPUT --- */
-        val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
-        val part1_demo_solution = part1(exampleInput)
-        "Part 1 Demo".printSeparated()
-        println("- Part 1 Demo: ${"$"}{part1_demo_solution}") 
-        // check(part1_demo_solution == exampleSolution1)
-        
-        
-//        "Part 2 Demo".printSeparated()
-//        val part2_demo_solution = part2(exampleInput)
-//        println("- Part 2 Demo: ${"$"}{part2_demo_solution}") 
-//        check(part2_demo_solution == exampleSolution2)
-        
-        /* --- RUN FULL INPUT ---
-            Reads input from the file src/@@AOC_YEAR@@/input/day_@@DAY_NUM_PADDED@@.txt
-            NOTE: You need to implement or import the readInput function. */
-        val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
-
-//        val part1_solution = part1(input)
-//        "Part 1".printSeparated()
-//        println("- Part 1: ${"$"}{part1_solution}") 
-//        check(part1_solution == 1)
-
-//        val part2_solution = part2(input)
-//        "Part 2".printSeparated()
-//        println("- Part 2: ${"$"}{part2_solution}") 
-//        check(part2_solution == 1)
-
-    } catch (t: Throwable) {
-        t.printStackTrace()
-        throw t
+fun loadKotlinTemplate(path: String = KOTLIN_TEMPLATE_FILE_PATH): String {
+    // File(path).readText() is the simplest way to read the entire file content
+    return try {
+        File(path).readText().trim()
+    } catch (e: Exception) {
+        // Handle the case where the template file is missing or unreadable
+        System.err.println("FATAL ERROR: Could not read Kotlin template file at $path.")
+        System.err.println("Ensure 'kotlin_template.txt' exists in the project root.")
+        throw e // Re-throw to halt execution
     }
 }
-"""
 
 fun loadEnvFile(path: String): Map<String, String> {
     val envMap = mutableMapOf<String, String>()
@@ -155,8 +113,9 @@ fun createKotlinFile(day: Int, year: Int) {
     if (outputPath.exists()) {
         println("⚠️ Solution file already exists: ${outputPath.path}")
     } else {
+        val templateContent = loadKotlinTemplate()
         // Perform replacements
-        val content = KOTLIN_TEMPLATE
+        val content = templateContent
             .replace("@@DAY_NUM_PADDED@@", dayPadded)
             .replace("@@DAY_NUM@@", dayNum)
             .replace("@@AOC_YEAR@@", year.toString()) // Inject the year
