@@ -45,3 +45,31 @@ fun splitInputToIntList(input: List<String>): List<List<Int>> {
             .map { it.toInt() }
     }
 }
+
+
+/**
+ * Splites a list of Strings into a two-dimensional grid of `Char`'s
+ */
+fun splitIntoCharGrid(input: List<String>): MutableList<MutableList<Char>> {
+    val grid = mutableListOf<MutableList<Char>>()
+    for(line in input) {
+        val row = line
+            .toMutableList()
+        grid.add(row)
+    }
+    return grid
+}
+/**
+ * Finds coordinates for a given `Char` in a two-dimensional grid
+ */
+fun findCoordsForChar(char: Char, grid: List<List<Char>>): List<Coord> {
+    val coords = mutableListOf<Coord>()
+    for((i,row) in grid.withIndex()) {
+        for((j,col) in row.withIndex()) {
+            if(col == char) {
+                coords.add(Coord(i,j))
+            }
+        }
+    }
+    return coords
+}
