@@ -24,13 +24,13 @@ fun main() {
         val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         val part1_demo_solution = part1(exampleInput)
         "Part 1 Demo".printSeparated()
-        println("- Part 1 Demo: ${"$"}{part1_demo_solution}")
+        println("- Part 1 Demo: ${part1_demo_solution}")
         // check(part1_demo_solution == exampleSolution1)
 
 
 //        "Part 2 Demo".printSeparated()
 //        val part2_demo_solution = part2(exampleInput)
-//        println("- Part 2 Demo: ${"$"}{part2_demo_solution}")
+//        println("- Part 2 Demo: $part2_demo_solution")
 //        check(part2_demo_solution == exampleSolution2)
 
         /* --- RUN FULL INPUT --- */
