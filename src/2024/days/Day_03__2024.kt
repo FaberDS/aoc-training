@@ -3,7 +3,6 @@
  * [Advent of code 2024-3 ](https://adventofcode.com/2024/day/3)
  **/
  import extensions.printSeparated
- import jdk.internal.joptsimple.util.RegexMatcher.regex
 
 
 fun main() {
