@@ -1,4 +1,4 @@
-import aoc.submitAocAnswer
+import aoc.handleSubmit
 import kotlin.math.abs
 
 /**
@@ -8,6 +8,7 @@ import kotlin.math.abs
 
 
 fun main() {
+
     fun part1(input: List<String>): Int {
         val splittedInput = splitInput(input)
         val list1: MutableList<Int> = splittedInput.first as MutableList<Int>;
@@ -42,13 +43,12 @@ fun main() {
         val part1_solution = part1(input)
         println("Part 1: $part1_solution")
         check(part1_solution == 1151792)
-        val result = submitAocAnswer(
+        handleSubmit(
             year = 2024,
             day = 1,
             level = 1,
             answer = part1_solution.toString()
         )
-        println("ok=${result.ok}, status=${result.status}, msg=${result.message}")
 
 
         val part2_solution = part2(input)

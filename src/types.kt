@@ -29,3 +29,15 @@ fun getAlphabeticNumber(value: String): NumbersAlphabetic? {
 
     return NumbersAlphabetic.entries.firstOrNull { it.name.equals(trimmed, ignoreCase = true) }
 }
+
+
+data class ConfigForDay(var submit1: Boolean = false,
+                        var submit2: Boolean = false,
+                        var check1: Boolean = false,
+                        var check2: Boolean = false,
+                        var checkDemo1: Boolean = false,
+                        var checkDemo2: Boolean = false,
+                        var exampleSolution1:Int = 0,
+                        var exampleSolution2: Int = 0,
+                        var solution1: Int = 0,
+                        var solution2: Int = 0)

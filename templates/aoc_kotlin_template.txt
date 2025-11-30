@@ -2,21 +2,31 @@
  * Advent of code (@@AOC_YEAR@@) solution for day @@DAY_NUM@@ by Denis Schüle.
  * [Advent of code @@AOC_YEAR@@-@@DAY_NUM@@ ](https://adventofcode.com/@@AOC_YEAR@@/day/@@DAY_NUM@@)
  **/
- import aoc.submitAocAnswer
- import extensions.printSeparated
+import aoc.handleSubmit
+import extensions.printSeparated
 
 
 fun main() {
 
-    val exampleSolution1 = 0
-    val exampleSolution2 = 0
+     val config = ConfigForDay(
+             submit1 = false,
+             submit2 = false,
+             check1 = false,
+             check2 = false,
+             checkDemo1 = false,
+             checkDemo2 = false,
+             exampleSolution1 = 0,
+             exampleSolution2 = 0,
+             solution1 = 0,
+             solution2 = 0)
 
     fun part1(input: List<String>): Int {
-        return 0
+        var result = 0
+        return result
     }
 
     fun part2(input: List<String>): Int {
-        return 0
+        return result
     }
 
     try {
@@ -26,42 +36,32 @@ fun main() {
         val part1_demo_solution = part1(exampleInput)
         "Part 1 Demo".printSeparated()
         println("- Part 1 Demo: ${part1_demo_solution}")
-        // check(part1_demo_solution == exampleSolution1)
+        if(config.checkDemo1) check(part1_demo_solution == config.exampleSolution1)
 
-
-//        "Part 2 Demo".printSeparated()
-//        val part2_demo_solution = part2(exampleInput)
-//        println("- Part 2 Demo: $part2_demo_solution")
-//        check(part2_demo_solution == exampleSolution2)
+        "Part 2 Demo".printSeparated()
+        val part2_demo_solution = part2(exampleInput)
+        println("- Part 2 Demo: $part2_demo_solution")
+        if(config.checkDemo2) check(part2_demo_solution == config.exampleSolution2)
 
         /* --- RUN FULL INPUT --- */
+        "Part 1".printSeparated()
+        val (part1_solution, timeTakenPart1) = measureTimedValue {
+            val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+           part1(input)
+        }
+        println("- Part 1: ${part1_solution} in $timeTakenPart1")
+        if(config.check1) check(part1_solution == config.solution1)
+        if(config.submit1) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,1,part1_solution.toString())
 
-//        "Part 1".printSeparated()
-//        val (part1_solution, timeTakenPart1) = measureTimedValue {
-//            val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
-//            part1(input)
-//        }
-//        println("- Part 1: ${part1_solution} in $timeTakenPart1")
-//        check(part1_solution == 1)
-
-//          val result = submitAocAnswer(
-//                      year = @@AOC_YEAR@@,
-//                      day = @@DAY_NUM@@,
-//                      level = 1,
-//                      answer = part1_solution.toString()
-//                  )
-//          println("ok=${result.ok}, status=${result.status}, msg=${result.message}")
-
-//        "Part 2".printSeparated()
-//        val (part2_solution, timeTakenPart2) = measureTimedValue {
-//            val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
-//            part2(input)
-//        }
-//        println("- Part 2: ${part2_solution} in $timeTakenPart2")
-//        check(part2_solution == 1)
-
+        "Part 2".printSeparated()
+        val (part2_solution, timeTakenPart2) = measureTimedValue {
+            val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+            part2(input)
+        }
+        println("- Part 2: ${part2_solution} in $timeTakenPart2")
+        if(config.check2) check(part2_solution == config.solution2)
+        if(config.submit2) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,2,part2_solution.toString())
     } catch (t: Throwable) {
         t.printStackTrace()
-        throw t
     }
 }

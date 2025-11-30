@@ -21,13 +21,25 @@ data class AocSubmissionResult(
         ERROR
     }
 }
+fun handleSubmit(year: Int,
+                 day: Int,
+                 level: Int,
+                 answer: String){
+    val result = submitAocAnswer(
+        year = year,
+        day = day,
+        level = level,
+        answer = answer
+    )
+    val prefix: String = if(result.ok) "✅" else "❌"
+    println("$prefix -> ok=${result.ok}, status=${result.status}, msg=${result.message}")
 
+}
 fun submitAocAnswer(
     year: Int,
     day: Int,
     level: Int,
-    answer: String,
-    sessionCookie: String? = null
+    answer: String
 ): AocSubmissionResult {
     val env = loadEnvFile(ENV_FILE_PATH)
     val session = env["AOC_SESSION_COOKIE"] ?: ""
