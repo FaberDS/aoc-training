@@ -15,8 +15,8 @@ fun main() {
              check2 = false,
              checkDemo1 = false,
              checkDemo2 = false,
-             exampleSolution1 = 0,
-             exampleSolution2 = 0,
+             exampleSolution1 = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@"),
+             exampleSolution2 = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@"),
              solution1 = 0,
              solution2 = 0)
 
@@ -32,7 +32,6 @@ fun main() {
     try {
 
         /* --- TEST DEMO INPUT --- */
-        val exampleInput = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         val part1_demo_solution = part1(exampleInput)
         "Part 1 Demo".printSeparated()
         println("- Part 1 Demo: ${part1_demo_solution}")

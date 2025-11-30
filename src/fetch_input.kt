@@ -102,7 +102,7 @@ fun createKotlinFile(day: Int, year: Int) {
     val INPUT_PATH = "src/$year/input"
 
     // Output file name: Day_02.kt
-    val outputFileName = "Day_$dayPadded.kt"
+    val outputFileName = "Day_${dayPadded}__$year.kt"
     val outputPath = File(DAYS_PATH, outputFileName)
 
     // Demo input file name: day_02_demo.txt
