@@ -2,6 +2,7 @@
  * Advent of code (@@AOC_YEAR@@) solution for day @@DAY_NUM@@ by Denis Schüle.
  * [Advent of code @@AOC_YEAR@@-@@DAY_NUM@@ ](https://adventofcode.com/@@AOC_YEAR@@/day/@@DAY_NUM@@)
  **/
+ import aoc.submitAocAnswer
  import extensions.printSeparated
 
 
@@ -42,6 +43,14 @@ fun main() {
 //        }
 //        println("- Part 1: ${part1_solution} in $timeTakenPart1")
 //        check(part1_solution == 1)
+
+//          val result = submitAocAnswer(
+//                      year = @@AOC_YEAR@@,
+//                      day = @@DAY_NUM@@,
+//                      level = 1,
+//                      answer = part1_solution.toString()
+//                  )
+//          println("ok=${result.ok}, status=${result.status}, msg=${result.message}")
 
 //        "Part 2".printSeparated()
 //        val (part2_solution, timeTakenPart2) = measureTimedValue {
