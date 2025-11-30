@@ -35,34 +35,34 @@ fun main() {
         val exampleInput1 = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         val exampleInput2 = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
         /* --- TEST DEMO INPUT --- */
-        val part1_demo_solution = part1(exampleInput1)
+        val part1DemoSolution = part1(exampleInput1)
         "Part 1 Demo".printSeparated()
-        println("- Part 1 Demo: ${part1_demo_solution}")
-        if(config.checkDemo1) check(part1_demo_solution == config.exampleSolution1)
+        println("- Part 1 Demo: ${part1DemoSolution}")
+        if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
 
         "Part 2 Demo".printSeparated()
-        val part2_demo_solution = part2(exampleInput2)
-        println("- Part 2 Demo: $part2_demo_solution")
-        if(config.checkDemo2) check(part2_demo_solution == config.exampleSolution2)
+        val part2DemoSolution = part2(exampleInput2)
+        println("- Part 2 Demo: $part2DemoSolution")
+        if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
 
         /* --- RUN FULL INPUT --- */
         "Part 1".printSeparated()
-        val (part1_solution, timeTakenPart1) = measureTimedValue {
+        val (part1Solution, timeTakenPart1) = measureTimedValue {
             val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
            part1(input)
         }
-        println("- Part 1: ${part1_solution} in $timeTakenPart1")
-        if(config.check1) check(part1_solution == config.solution1)
-        if(config.submit1) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,1,part1_solution.toString())
+        println("- Part 1: ${part1Solution} in $timeTakenPart1")
+        if(config.check1) check(part1Solution == config.solution1)
+        if(config.submit1) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,1,part1Solution.toString())
 
         "Part 2".printSeparated()
-        val (part2_solution, timeTakenPart2) = measureTimedValue {
+        val (part2Solution, timeTakenPart2) = measureTimedValue {
             val input = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
             part2(input)
         }
-        println("- Part 2: ${part2_solution} in $timeTakenPart2")
-        if(config.check2) check(part2_solution == config.solution2)
-        if(config.submit2) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,2,part2_solution.toString())
+        println("- Part 2: ${part2Solution} in $timeTakenPart2")
+        if(config.check2) check(part2Solution == config.solution2)
+        if(config.submit2) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,2,part2Solution.toString())
     } catch (t: Throwable) {
         t.printStackTrace()
     }
