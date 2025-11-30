@@ -73,3 +73,8 @@ fun findCoordsForChar(char: Char, grid: List<List<Char>>): List<Coord> {
     }
     return coords
 }
+
+fun getAlphaNumericRegex(overlapping: Boolean) : Regex {
+    val overlappingHandling = if (overlapping) "?=" else ""
+    return Regex("""($overlappingHandling(one|two|three|four|five|six|seven|eight|nine|\d))""")
+}
