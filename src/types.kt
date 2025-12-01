@@ -74,4 +74,5 @@ fun extractInstructions(line: String): Rotation? {
     val distance = trimmed.substring(1).toIntOrNull() ?: return null
 
     return Rotation(dir, distance)
+
 }
