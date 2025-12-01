@@ -5,6 +5,7 @@
 import Rotation
 import RotationDirection
 import aoc.handleSubmit
+import com.sun.org.apache.xpath.internal.operations.Bool
 import extensions.printSeparated
 import java.util.Collections.rotate
 import kotlin.math.abs
@@ -18,8 +19,8 @@ fun main() {
              submit1 = false,
              submit2 = false,
              check1 = true,
-             check2 = false,
-             checkDemo1 = false,
+             check2 = true,
+             checkDemo1 = true,
              checkDemo2 = true,
              exampleSolution1 = 3,
              exampleSolution2 = 6,
@@ -37,13 +38,10 @@ fun main() {
                 passedZero++
             }
         }
-
         return pos to passedZero
     }
 
-    fun part1(input: List<String>): Int {
-        var result = 0
-        var position = 50
+    fun getIntstructions(input: List<String>): List<Rotation> {
         val rotations = mutableListOf<Rotation>()
         for (line in input) {
             val instruction = extractInstructions(line)
@@ -52,36 +50,33 @@ fun main() {
 
             }
         }
-        for (instruction in rotations) {
-            val rotationResult = rotate(instruction, position)
-            position = rotationResult.first
-            if (position == 0) {
+        return rotations
+    }
+
+    fun applyInstruction(instructions: List<Rotation>, initialPosition: Int = 50, countEveryZeroPassing: Boolean = false ): Int {
+        var position = initialPosition
+        var result = 0
+        for (instruction in instructions) {
+            val (newPosition, zerosThisRotation) = rotate(instruction, position)
+            if(countEveryZeroPassing) {
+                result += zerosThisRotation
+            } else if(newPosition == 0) {
                 result++
             }
-            println("position: $position, result: $result, newPosition: $rotationResult basedOn $instruction ")
-
+            position = newPosition
         }
         return result
     }
 
+    fun part1(input: List<String>): Int {
+        val instructions = getIntstructions(input)
+        val result = applyInstruction(instructions)
+        return result
+    }
+
     fun part2(input: List<String>): Int {
-        var result = 0
-        var position = 50
-        val rotations = mutableListOf<Rotation>()
-
-        for (line in input) {
-            val instruction = extractInstructions(line)
-            if (instruction != null) {
-                rotations.add(instruction)
-            }
-        }
-
-        for (instruction in rotations) {
-            val (newPosition, zerosThisRotation) = rotate(instruction, position)
-            result += zerosThisRotation
-            position = newPosition
-        }
-
+        val instructions = getIntstructions(input)
+        val result = applyInstruction(instructions, countEveryZeroPassing = true)
         return result
     }
 
