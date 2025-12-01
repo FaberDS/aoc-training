@@ -59,21 +59,12 @@ enum class RotationDirection(val code: Char) {
 
 data class Rotation(val direction: RotationDirection, val distance: Int)
 
-fun extractInstructions(instructions: String): Rotation?{
-    val regex = Regex("""([LR])|(\d+)""")
+fun extractInstructions(line: String): Rotation? {
+    val trimmed = line.trim()
+    if (trimmed.isEmpty()) return null
 
-    var currentRotation: RotationDirection? = null
+    val dir = RotationDirection.fromChar(trimmed[0]) ?: return null
+    val distance = trimmed.substring(1).toIntOrNull() ?: return null
 
-    for (match in regex.findAll(instructions)) {
-        val rotToken = match.groups[1]?.value
-        val numToken = match.groups[2]?.value
-
-        if (rotToken != null) {
-            currentRotation = RotationDirection.fromChar(rotToken[0])
-        } else if (numToken != null && currentRotation != null) {
-            val steps = numToken.toInt()
-            return Rotation(currentRotation, numToken.toInt())
-        }
-    }
-    return null
+    return Rotation(dir, distance)
 }

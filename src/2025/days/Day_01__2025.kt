@@ -5,13 +5,13 @@
 import Rotation
 import RotationDirection
 import aoc.handleSubmit
-import com.sun.org.apache.xpath.internal.operations.Bool
 import extensions.printSeparated
-import jdk.javadoc.internal.tool.Main.execute
-import java.util.Collections.rotate
-import kotlin.math.abs
 import kotlin.time.measureTimedValue
 
+enum class CountMode {
+    END_ONLY,       // Part 1
+    EVERY_CLICK_ZERO // Part 2
+}
 
 fun main() {
 
@@ -46,42 +46,42 @@ fun main() {
         return pos to passedZero
     }
 
-    fun getIntstructions(input: List<String>): List<Rotation> {
-        val rotations = mutableListOf<Rotation>()
-        for (line in input) {
-            val instruction = extractInstructions(line)
-            if(instruction != null) {
-                rotations.add(instruction)
 
-            }
-        }
-        return rotations
-    }
+    data class Acc(
+        val position: Int,
+        val result: Int
+    )
 
-    fun applyInstruction(instructions: List<Rotation>, initialPosition: Int = 50, countEveryZeroPassing: Boolean = false ): Int {
-        var position = initialPosition
-        var result = 0
-        for (instruction in instructions) {
-            val (newPosition, zerosThisRotation) = rotate(instruction, position)
-            if(countEveryZeroPassing) {
-                result += zerosThisRotation
-            } else if(newPosition == 0) {
-                result++
+    fun applyInstructions(
+        instructions: List<Rotation>,
+        initialPosition: Int = 50,
+        mode: CountMode
+    ): Int {
+        return instructions.fold(Acc(initialPosition, 0)) { acc, rotation ->
+            val (newPosition, zerosDuringRotation) = rotate(rotation, acc.position)
+
+            val delta = when (mode) {
+                CountMode.END_ONLY ->
+                    if (newPosition == 0) 1 else 0
+                CountMode.EVERY_CLICK_ZERO ->
+                    zerosDuringRotation
             }
-            position = newPosition
-        }
-        return result
+
+            Acc(newPosition, acc.result + delta)
+        }.result
     }
 
     fun part1(input: List<String>): Int {
-        val instructions = getIntstructions(input)
-        val result = applyInstruction(instructions)
+        val instructions = input
+            .mapNotNull(::extractInstructions)
+        val result = applyInstructions(instructions, mode = CountMode.END_ONLY)
         return result
     }
 
     fun part2(input: List<String>): Int {
-        val instructions = getIntstructions(input)
-        val result = applyInstruction(instructions, countEveryZeroPassing = true)
+        val instructions = input
+            .mapNotNull(::extractInstructions)
+        val result = applyInstructions(instructions, mode = CountMode.EVERY_CLICK_ZERO)
         return result
     }
 
