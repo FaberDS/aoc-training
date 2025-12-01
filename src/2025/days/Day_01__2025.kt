@@ -2,36 +2,91 @@
  * Advent of code (2025) solution for day 1 by Denis Schüle.
  * [Advent of code 2025-1 ](https://adventofcode.com/2025/day/1)
  **/
+import Rotation
+import RotationDirection
 import aoc.handleSubmit
 import extensions.printSeparated
+import java.util.Collections.rotate
+import kotlin.math.abs
 import kotlin.time.measureTimedValue
 
 
 fun main() {
 
+
      val config = ConfigForDay(
              submit1 = false,
              submit2 = false,
-             check1 = false,
+             check1 = true,
              check2 = false,
              checkDemo1 = false,
-             checkDemo2 = false,
-             exampleSolution1 = 0,
-             exampleSolution2 = 0,
-             solution1 = 0,
-             solution2 = 0)
+             checkDemo2 = true,
+             exampleSolution1 = 3,
+             exampleSolution2 = 6,
+             solution1 = 1092,
+             solution2 = 6616) //wrong: 2624, 4936,7708
+
+    fun rotate(rotation: Rotation, position: Int): Pair<Int, Int> {
+        val step = if (rotation.direction == RotationDirection.RIGHT) 1 else -1
+        var pos = position
+        var passedZero = 0
+
+        repeat(rotation.distance) {
+            pos = (pos + step + 100) % 100
+            if (pos == 0) {
+                passedZero++
+            }
+        }
+
+        return pos to passedZero
+    }
 
     fun part1(input: List<String>): Int {
         var result = 0
+        var position = 50
+        val rotations = mutableListOf<Rotation>()
+        for (line in input) {
+            val instruction = extractInstructions(line)
+            if(instruction != null) {
+                rotations.add(instruction)
+
+            }
+        }
+        for (instruction in rotations) {
+            val rotationResult = rotate(instruction, position)
+            position = rotationResult.first
+            if (position == 0) {
+                result++
+            }
+            println("position: $position, result: $result, newPosition: $rotationResult basedOn $instruction ")
+
+        }
         return result
     }
 
     fun part2(input: List<String>): Int {
         var result = 0
+        var position = 50
+        val rotations = mutableListOf<Rotation>()
+
+        for (line in input) {
+            val instruction = extractInstructions(line)
+            if (instruction != null) {
+                rotations.add(instruction)
+            }
+        }
+
+        for (instruction in rotations) {
+            val (newPosition, zerosThisRotation) = rotate(instruction, position)
+            result += zerosThisRotation
+            position = newPosition
+        }
+
         return result
     }
 
     try {
+
         val exampleInput1 = readInput("day_01_demo", "2025")
         val exampleInput2 = readInput("day_01_demo", "2025")
         /* --- TEST DEMO INPUT --- */
@@ -67,3 +122,4 @@ fun main() {
         t.printStackTrace()
     }
 }
+

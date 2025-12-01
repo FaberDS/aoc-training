@@ -1,3 +1,4 @@
+import RotationDirection
 import com.sun.tools.javac.jvm.Gen.one
 
 /**
@@ -41,3 +42,34 @@ data class ConfigForDay(var submit1: Boolean = false,
                         var exampleSolution2: Int = 0,
                         var solution1: Int = 0,
                         var solution2: Int = 0)
+
+enum class RotationDirection(val code: Char) {
+    LEFT('L')
+    ,RIGHT('R');
+
+    companion object {
+        fun fromChar(c: Char): RotationDirection? =
+            entries.firstOrNull { it.code == c }
+    }
+}
+
+data class Rotation(val direction: RotationDirection, val distance: Int)
+
+fun extractInstructions(instructions: String): Rotation?{
+    val regex = Regex("""([LR])|(\d+)""")
+
+    var currentRotation: RotationDirection? = null
+
+    for (match in regex.findAll(instructions)) {
+        val rotToken = match.groups[1]?.value
+        val numToken = match.groups[2]?.value
+
+        if (rotToken != null) {
+            currentRotation = RotationDirection.fromChar(rotToken[0])
+        } else if (numToken != null && currentRotation != null) {
+            val steps = numToken.toInt()
+            return Rotation(currentRotation, numToken.toInt())
+        }
+    }
+    return null
+}
