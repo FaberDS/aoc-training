@@ -1,35 +1,42 @@
-import RotationDirection
-import com.sun.tools.javac.jvm.Gen.one
-
 /**
  * Basic Coordinate type
  */
 data class Coord(val row: Int, val col: Int)
 
-enum class NumbersAlphabetic(val number: Int) {
-    one(1),
-    two(2),
-    three(3),
-    four(4),
-    five(5),
-    six(6),
-    seven(7),
-    eight(8),
-    nine(9),
-    zero(0);
+enum class NumbersAlphabetic(val value: Int) {
+    ZERO(0),
+    ONE(1),
+    TWO(2),
+    THREE(3),
+    FOUR(4),
+    FIVE(5),
+    SIX(6),
+    SEVEN(7),
+    EIGHT(8),
+    NINE(9);
 
-    fun toInt() = number
-}
+    fun toInt(): Int = value
 
-fun getAlphabeticNumber(value: String): NumbersAlphabetic? {
-    val trimmed = value.trim()
+    companion object {
+        fun fromString(raw: String): NumbersAlphabetic? {
+            val trimmed = raw.trim()
 
-    trimmed.toIntOrNull()?.let { n ->
-        NumbersAlphabetic.entries.firstOrNull { it.number == n }?.let { return it }
+            // numeric form: "1"
+            trimmed.toIntOrNull()?.let { n ->
+                return entries.firstOrNull { it.value == n }
+            }
+
+            // alphabetic form: "one", "Two", etc.
+            return entries.firstOrNull {
+                it.name.equals(trimmed, ignoreCase = true)
+            }
+        }
     }
-
-    return NumbersAlphabetic.entries.firstOrNull { it.name.equals(trimmed, ignoreCase = true) }
 }
+
+fun getAlphabeticNumber(value: String): NumbersAlphabetic? =
+    NumbersAlphabetic.fromString(value)
+
 
 
 data class ConfigForDay(var submit1: Boolean = false,
