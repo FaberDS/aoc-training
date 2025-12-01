@@ -6,8 +6,11 @@ import kotlin.io.path.readText
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = Path("src/$name.txt").readText().trim().lines()
-fun readInput(name: String, year: String = "2024") = Path("src/$year/input/$name.txt").readText().trim().lines()
+fun readInputLocal(name: String): List<String> =
+    Path("src/$name.txt").readText().trim().lines()
+
+fun readInput(name: String, year: String = "2024"): List<String> =
+    Path("src/$year/input/$name.txt").readText().trim().lines()
 
 /**
  * Converts string to md5 hash.
@@ -24,27 +27,29 @@ fun Any?.println() = println(this)
 /**
  * Split input string by spaces into two lists of Int
  */
-fun splitInput(input: List<String>): Pair<List<Int>,List<Int>> {
-    val list1: MutableList<Int> = mutableListOf();
-    val list2: MutableList<Int> = mutableListOf();
-    for (i in input.indices) {
-        val (l,r) = input[i].split("   ")
-        list1.add(l.toInt())
-        list2.add(r.toInt())
-    }
-    return Pair(list1, list2)
+fun splitInput(input: List<String>): Pair<List<Int>, List<Int>> {
+    val (left, right) = input
+        .map { line ->
+            val (l, r) = line.split("   ")
+            l.toInt() to r.toInt()
+        }
+        .unzip()
+
+    return left to right
 }
+
 
 /**
  * Split input string by spaces into int list
  */
-fun splitInputToIntList(input: List<String>): List<List<Int>> {
-    return input.map { line ->
-        line.split(" ")
-            .filter { it.isNotBlank() }
-            .map { it.toInt() }
+fun splitInputToIntList(input: List<String>): List<List<Int>> =
+    input.map { line ->
+        line
+            .split(' ')
+            .filter(String::isNotBlank)
+            .map(String::toInt)
     }
-}
+
 
 
 /**
@@ -53,28 +58,29 @@ fun splitInputToIntList(input: List<String>): List<List<Int>> {
 fun splitIntoCharGrid(input: List<String>): MutableList<MutableList<Char>> {
     val grid = mutableListOf<MutableList<Char>>()
     for(line in input) {
-        val row = line
-            .toMutableList()
+        val row = line.toMutableList()
         grid.add(row)
     }
     return grid
 }
+
 /**
  * Finds coordinates for a given `Char` in a two-dimensional grid
  */
-fun findCoordsForChar(char: Char, grid: List<List<Char>>): List<Coord> {
-    val coords = mutableListOf<Coord>()
-    for((i,row) in grid.withIndex()) {
-        for((j,col) in row.withIndex()) {
-            if(col == char) {
-                coords.add(Coord(i,j))
-            }
+fun findCoordsForChar(char: Char, grid: List<List<Char>>): List<Coord> =
+    grid.flatMapIndexed { rowIndex, row ->
+        row.mapIndexedNotNull { colIndex, c ->
+            if (c == char) Coord(rowIndex, colIndex) else null
         }
     }
-    return coords
-}
 
-fun getAlphaNumericRegex(overlapping: Boolean) : Regex {
-    val overlappingHandling = if (overlapping) "?=" else ""
-    return Regex("""($overlappingHandling(one|two|three|four|five|six|seven|eight|nine|\d))""")
+private val numberWords = listOf(
+    "one", "two", "three", "four", "five",
+    "six", "seven", "eight", "nine"
+)
+
+fun getAlphaNumericRegex(overlapping: Boolean): Regex {
+    val overlap = if (overlapping) "?=" else ""
+    val words = numberWords.joinToString("|")
+    return Regex("""($overlap($words|\d))""")
 }
