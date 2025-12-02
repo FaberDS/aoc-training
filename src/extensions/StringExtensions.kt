@@ -39,3 +39,24 @@ fun String.splitInHalf(): Pair<String, String> {
     val second = substring(mid)
     return first to second
 }
+
+fun String.allCharsSame(): Boolean {
+    return this.toSet().size == 1
+}
+
+fun String.findRepeatingUnit(): String? {
+    if (length <= 1) return null
+
+    for (len in 1..length / 2) {
+        if (length % len != 0) continue
+
+        val unit = substring(0, len)
+        if (unit.repeat(length / len) == this) {
+            return unit   // e.g. "56" for "565656"
+        }
+    }
+    return null
+}
+
+fun String.isRepeatingPattern(): Boolean =
+    findRepeatingUnit() != null
