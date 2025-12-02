@@ -32,3 +32,10 @@ fun String.printSeparated(width: Int = 80, char: Char = '#') {
     println(sep)
     println()
 }
+
+fun String.splitInHalf(): Pair<String, String> {
+    val mid = length / 2
+    val first = substring(0, mid)
+    val second = substring(mid)
+    return first to second
+}
