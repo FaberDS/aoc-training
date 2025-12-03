@@ -8,6 +8,7 @@ import extensions.firstElement
 import extensions.printSeparated
 import extensions.removeFirstElement
 import kotlin.collections.first
+import kotlin.text.indexOf
 import kotlin.time.measureTimedValue
 
 
@@ -32,73 +33,64 @@ fun main() {
      *
      *
      */
-     val config = ConfigForDay(
-             submit1 = true,
+
+    /**
+     * PART-2
+     * The joltage output for the bank is still the number formed by the digits of the batteries you've turned on; the only difference is that now there will be 12 digits in each bank's joltage output instead of two.
+     *
+     * Consider again the example from before:
+     *
+     * 987654321111111
+     * 811111111111119
+     * 234234234234278
+     * 818181911112111
+     * Now, the joltages are much larger:
+     *
+     * In 987654321111111, the largest joltage can be found by turning on everything except some 1s at the end to produce 987654321111.
+     * In the digit sequence 811111111111119, the largest joltage can be found by turning on everything except some 1s, producing 811111111119.
+     * In 234234234234278, the largest joltage can be found by turning on everything except a 2 battery, a 3 battery, and another 2 battery near the start to produce 434234234278.
+     * In 818181911112111, the joltage 888911112111 is produced by turning on everything except some 1s near the front.
+     * The total output joltage is now much larger: 987654321111 + 811111111119 + 434234234278 + 888911112111 = 3121910778619.
+     */
+    val config = ConfigForDay(
+             submit1 = false,
              submit2 = false,
-             check1 = false,
-             check2 = false,
-             checkDemo1 = false,
-             checkDemo2 = false,
+             check1 = true,
+             check2 = true,
+             checkDemo1 = true,
+             checkDemo2 = true,
              execute1 = true,
-             execute2 = false,
+             execute2 = true,
              execute1demo = true,
-             execute2demo = false,
+             execute2demo = true,
              exampleSolution1 = 357,
              exampleSolution2 = 0,
-             solution1 = 0,
+             solution1 = 17193,
              solution2 = 0)
-    fun twoHighestInOrder(nums: List<Int>): List<Pair<Int,Int>> {
-        var firstIdx = -1
-        var secondIdx = -1
 
-        for ((idx, v) in nums.withIndex()) {
-            if (firstIdx == -1 || v > nums[firstIdx]) {
-                // shift the old max to second
-                secondIdx = firstIdx
-                firstIdx = idx
-            } else if (idx != firstIdx && (secondIdx == -1 || v > nums[secondIdx])) {
-                secondIdx = idx
-            }
+    fun findMaxNumberWithNDigits(row: String,n: Int, maxIndex: Int): String {
+        if (maxIndex > row.length ) return ""
+        val maxInt =  row.subSequence(0,maxIndex).maxByOrNull { it.code }
+        if (maxInt == null) {
+            return ""
         }
-        if (secondIdx == -1) return listOf(nums[firstIdx] to firstIdx)
-        return if (firstIdx < secondIdx)
-            listOf(nums[firstIdx] to firstIdx, nums[secondIdx] to secondIdx)
-        else
-            listOf(nums[secondIdx] to secondIdx, nums[firstIdx] to firstIdx)
+        val newIndex = row.indexOf(maxInt)
+        val newRow = row.substring(newIndex +1)
+        val newMaxIndex = newRow.length -n +2
+        return "$maxInt" + findMaxNumberWithNDigits(newRow, n - 1, newMaxIndex)
     }
 
-    fun findHighestJoltage(row: String): Int {
-        val digits = row.map { it.digitToInt() }
-        val topTwo = twoHighestInOrder(digits)
-        var h = topTwo.first()
-        var highest = h.first
-        var s = topTwo[1]
-        var second = s.first
-        println("Highest Joltage: $highest $second | s.first > h.first: ${s.first > h.first}")
-        val splitPoint = s.second + 1
-        if (s.first > h.first && splitPoint < row.length) {
-            val secondString = row.substring(splitPoint)
-            val three = secondString.map { it.digitToInt() }.sortedDescending().first()
-            println("secondString: $secondString | three: $three")
-
-            second = three
-            highest = s.first
-        }
-        val joltage =  "$highest$second".toInt()
-        println("joltage: $joltage | l: $topTwo | row: $row | digits: $digits")
-
-        return joltage
-    }
-    fun part1(input: List<String>): Int {
+    fun solveDay3(input: List<String>, n: Int): Long {
         return input
-            .sumOf{findHighestJoltage(it)}
+            .sumOf{
+                val maxIndex = it.length -n +1
+                findMaxNumberWithNDigits(it, n,maxIndex).toLong()
+            }
     }
+    fun part1(input: List<String>) = solveDay3(input,2)
 
 
-    fun part2(input: List<String>): Int {
-        var result = 0
-        return result
-    }
+    fun part2(input: List<String>) = solveDay3(input,12)
 
     try {
         val exampleInput1 = readInput("day_03_demo", "2025")
@@ -108,14 +100,15 @@ fun main() {
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
-            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
+            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1.toLong())
         }
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
+//            val part2DemoSolution = part2(mutableListOf("234234234234278"))
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
+            if(config.checkDemo2) check(part2DemoSolution == 3121910778619)
         }
 
         /* --- RUN FULL INPUT --- */
@@ -126,7 +119,7 @@ fun main() {
                part1(input)
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
-            if(config.check1) check(part1Solution == config.solution1)
+            if(config.check1) check(part1Solution == config.solution1.toLong())
             if(config.submit1) handleSubmit(2025,3,1,part1Solution.toString())
         }
 
@@ -137,7 +130,7 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == config.solution2)
+            if(config.check2) check(part2Solution == 171297349921310)
             if(config.submit2) handleSubmit(2025,3,2,part2Solution.toString())
         }
     } catch (t: Throwable) {
