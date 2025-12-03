@@ -37,7 +37,6 @@ if [ -z "$1" ]; then
         exit 1
     fi
 else
-    # Normal explicit-arguments mode ONLY here
     DAY=$(printf "%02d" "$1")      # Pad day to two digits (01, 02, etc.)
     YEAR=${2:-$CURRENT_YEAR}       # Use $2 if provided, otherwise use CURRENT_YEAR
 fi
