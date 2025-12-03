@@ -2,20 +2,44 @@
 
 # --- Configuration ---
 GRADLE_TASK="./gradlew fetchInput"
-# Default to the current year if not provided
 CURRENT_YEAR=$(date +%Y)
+CURRENT_MONTH=$(date +%m)
+CURRENT_DAY=$(date +%d)
 # ---------------------
 
-# 1. Validate Arguments
-if [ -z "$1" ]; then
+usage() {
     echo "Usage: $0 <day> [year]"
-    echo "Example: $0 1 - Sets up Day 1 for the current year ($CURRENT_YEAR)."
-    echo "Example: $0 5 2023 - Sets up Day 5 for 2023."
-    exit 1
-fi
+    echo "Example: $0 1        - Sets up Day 1 for the current year ($CURRENT_YEAR)."
+    echo "Example: $0 5 2023   - Sets up Day 5 for 2023."
+}
 
-DAY=$(printf "%02d" "$1") # Pad day to two digits (01, 02, etc.)
-YEAR=${2:-$CURRENT_YEAR}   # Use $2 if provided, otherwise use CURRENT_YEAR
+# 1. Determine DAY and YEAR (with auto-mode for December)
+if [ -z "$1" ]; then
+    # No parameters -> try "today" logic
+    if [ "$CURRENT_MONTH" = "12" ]; then
+        DAY=$(printf "%02d" "$CURRENT_DAY")
+        YEAR="$CURRENT_YEAR"
+
+        # ⚠️ Match your actual filename pattern: Day_03__2025.kt
+        TODAY_FILE="src/$YEAR/days/Day_${DAY}__${YEAR}.kt"
+
+        if [ -e "$TODAY_FILE" ]; then
+            echo "Setup already exists for YEAR=$YEAR, DAY=$DAY:"
+            echo "-> $TODAY_FILE"
+            echo "Nothing to do. Exiting."
+            exit 0
+        else
+            echo "No parameters provided; auto-detected Advent of Code date:"
+            echo "-> Using YEAR=$YEAR, DAY=$DAY (today)."
+        fi
+    else
+        usage
+        exit 1
+    fi
+else
+    DAY=$(printf "%02d" "$1")      # Pad day to two digits (01, 02, etc.)
+    YEAR=${2:-$CURRENT_YEAR}       # Use $2 if provided, otherwise use CURRENT_YEAR
+fi
 
 echo "Starting Advent of Code setup for $YEAR Day $DAY..."
 
