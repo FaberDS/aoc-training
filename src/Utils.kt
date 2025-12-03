@@ -1,3 +1,4 @@
+import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
@@ -38,7 +39,6 @@ fun splitInput(input: List<String>): Pair<List<Int>, List<Int>> {
     return left to right
 }
 
-
 /**
  * Split input string by spaces into int list
  */
@@ -50,8 +50,26 @@ fun splitInputToIntList(input: List<String>): List<List<Int>> =
             .map(String::toInt)
     }
 
+fun splitInputToIntPositionMap(
+    input: List<String>,
+    descending: Boolean = true
+): List<Map<Int, Int>> {
+    return input.map { row ->
+        val pairs = row
+            .filter { !it.isWhitespace() }
+            .mapIndexed { index, ch ->
+                val number = ch.digitToInt()
+               index to number
+            }
 
-
+        val sortedPairs = if (descending) {
+            pairs.sortedByDescending { it.second }
+        } else {
+            pairs.sortedBy { it.second }
+        }
+        sortedPairs.toMap()
+    }
+}
 /**
  * Splites a list of Strings into a two-dimensional grid of `Char`'s
  */
