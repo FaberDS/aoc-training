@@ -1,5 +1,7 @@
 package extensions
 
+import kotlin.text.indexOf
+
 /**
  * Prints the given text centered within a fixed-width separator block.
  * This is implemented as an extension function on String for idiomatic Kotlin usage.
@@ -60,3 +62,16 @@ fun String.findRepeatingUnit(): String? {
 
 fun String.isRepeatingPattern(): Boolean =
     findRepeatingUnit() != null
+
+
+fun String.findMaxNumberWithNDigits(n: Int, maxIndex: Int): String {
+    val maxInt = this
+        .takeIf { maxIndex <= length }
+        ?.subSequence(0, maxIndex)
+        ?.maxByOrNull { it }
+        ?: return ""
+    val newIndex = this.indexOf(maxInt)
+    val newRow = this.substring(newIndex +1)
+    val newMaxIndex = newRow.length -n +2
+    return "$maxInt" + newRow.findMaxNumberWithNDigits(n - 1, newMaxIndex)
+}

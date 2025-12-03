@@ -4,6 +4,7 @@
  **/
 import aoc.handleSubmit
 import com.sun.org.apache.xalan.internal.lib.ExsltMath.highest
+import extensions.findMaxNumberWithNDigits
 import extensions.firstElement
 import extensions.printSeparated
 import extensions.removeFirstElement
@@ -68,23 +69,16 @@ fun main() {
              solution1 = 17193,
              solution2 = 0)
 
-    fun findMaxNumberWithNDigits(row: String,n: Int, maxIndex: Int): String {
-        if (maxIndex > row.length ) return ""
-        val maxInt =  row.subSequence(0,maxIndex).maxByOrNull { it.code }
-        if (maxInt == null) {
-            return ""
-        }
-        val newIndex = row.indexOf(maxInt)
-        val newRow = row.substring(newIndex +1)
-        val newMaxIndex = newRow.length -n +2
-        return "$maxInt" + findMaxNumberWithNDigits(newRow, n - 1, newMaxIndex)
-    }
-
     fun solveDay3(input: List<String>, n: Int): Long {
         return input
             .sumOf{
                 val maxIndex = it.length -n +1
-                findMaxNumberWithNDigits(it, n,maxIndex).toLong()
+                val maxDigit = it.findMaxNumberWithNDigits(n,maxIndex)
+                if (maxDigit.isBlank()) {
+                    return 0L
+                } else {
+                    maxDigit.toLong()
+                }
             }
     }
     fun part1(input: List<String>) = solveDay3(input,2)
@@ -106,7 +100,6 @@ fun main() {
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
-//            val part2DemoSolution = part2(mutableListOf("234234234234278"))
             println("- Part 2 Demo: $part2DemoSolution")
             if(config.checkDemo2) check(part2DemoSolution == 3121910778619)
         }
