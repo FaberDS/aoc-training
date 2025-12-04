@@ -58,92 +58,24 @@ fun main() {
      */
     val config = ConfigForDay(
              submit1 = false,
-             submit2 = true,
-             check1 = false,
+             submit2 = false,
+             check1 = true,
              check2 = false,
              checkDemo1 = true,
              checkDemo2 = true,
-             execute1 = false,
+             execute1 = true,
              execute2 = true,
              execute1demo = true,
              execute2demo = true,
              exampleSolution1 = 13,
              exampleSolution2 = 43,
              solution1 = 1478,
-             solution2 = 0)
-    fun hasLessThanNeighbours(grid: List<List<Char>>, n: Int, row: Int,col: Int): Boolean {
-        var neighbours = 0
-        for(adjust in AdjacentPositions.entries) {
-            val r = row + adjust.row
-            val c = col + adjust.col
-            try {
-                val isEmpty = grid.get(r).get(c) == '.'
-                if(!isEmpty) {
-                    neighbours++
-                }
-            } catch (e: Exception) {
-
-            }
-
-            if(neighbours >= n) {
-//                println("hasLessThanNeighbours: row: $row, col: $col, neighbours: $neighbours")
-                return false
-            }
-        }
-        return if(neighbours >= n) false else true
-    }
-
-    fun isRoll(c: Char): Boolean = c == '@'
+             solution2 = 9120)
 
 
+    fun part1(lines: List<String>): Long = CharGridFromString(lines).cellsWithLessThanNNeighbours(4).toLong()
 
-
-    fun part1(input: List<String>): Long {
-        val grid = splitIntoCharGrid(input)
-
-        var result = 0L
-        for ((rowIndex,row) in grid.withIndex()) {
-            for ((colIndex,col) in row.withIndex()) {
-                if (!isRoll(col)) continue
-                val hasLessThanNeighbours = hasLessThanNeighbours(grid,4,rowIndex,colIndex)
-                println("row: $rowIndex ($row), col: $colIndex ($col) | hasLess: ${hasLessThanNeighbours}")
-                result += if (hasLessThanNeighbours) 1 else 0
-            }
-        }
-
-        return result
-    }
-    fun removeRolls(grid: MutableList<MutableList<Char>>): Pair<List<List<Char>>,Int> {
-        var removedRolls = 0
-        for ((rowIndex,row) in grid.withIndex()) {
-            for ((colIndex,col) in row.withIndex()) {
-                if (!isRoll(col)) continue
-                val hasLessThanNeighbours = hasLessThanNeighbours(grid,4,rowIndex,colIndex)
-//                println("row: $rowIndex ($row), col: $colIndex ($col) | hasLess: ${hasLessThanNeighbours}")
-                 if (hasLessThanNeighbours) {
-                     grid[rowIndex][colIndex] = '.'
-                     removedRolls += 1
-                 }
-            }
-        }
-        return grid to removedRolls
-    }
-    fun part2(input: List<String>): Long {
-        var grid = splitIntoCharGrid(input)
-
-        var result = 0L
-
-        var couldRemoveRolls = true
-        while (couldRemoveRolls) {
-            val (updatedGrid,removedCount) = removeRolls(grid as MutableList<MutableList<Char>>)
-            if (removedCount == 0) couldRemoveRolls = false
-            result += removedCount
-//            println("removedCount: $removedCount")
-            grid = updatedGrid
-        }
-
-        return result
-    }
+    fun part2(lines: List<String>): Long = CharGridFromString(lines).removeRollsWithLessThanNNeighbours(4).toLong()
 
     try {
         val exampleInput2 = readInput("day_04_demo", "2025")
@@ -182,7 +114,7 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == 0L)
+            if(config.check2) check(part2Solution == 9120L)
             if(config.submit2) handleSubmit(2025,4,2,part2Solution.toString())
         }
     } catch (t: Throwable) {

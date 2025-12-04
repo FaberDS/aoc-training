@@ -87,3 +87,4 @@ enum class AdjacentPositions(val row: Int, val col: Int) {
     BOTTOM_CENTER(+1, 0),
     BOTTOM_RIGHT(+1, +1);
 }
+
