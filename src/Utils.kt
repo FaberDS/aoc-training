@@ -1,4 +1,3 @@
-import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
@@ -50,6 +49,7 @@ fun splitInputToIntList(input: List<String>): List<List<Int>> =
             .map(String::toInt)
     }
 
+
 fun splitInputToIntPositionMap(
     input: List<String>,
     descending: Boolean = true
@@ -73,7 +73,7 @@ fun splitInputToIntPositionMap(
 /**
  * Splites a list of Strings into a two-dimensional grid of `Char`'s
  */
-fun splitIntoCharGrid(input: List<String>): MutableList<MutableList<Char>> {
+fun splitIntoCharGrid(input: List<String>): List<List<Char>> {
     val grid = mutableListOf<MutableList<Char>>()
     for(line in input) {
         val row = line.toMutableList()
