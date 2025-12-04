@@ -16,7 +16,40 @@ import kotlin.time.measureTimedValue
 fun main() {
     /**
      * PART-1
-
+    * The rolls of paper (@) are arranged on a large grid; the Elves even have a helpful diagram (your puzzle input)
+     * indicating where everything is located.
+     *
+     * For example:
+     *
+     * ..@@.@@@@.
+     * @@@.@.@.@@
+     * @@@@@.@.@@
+     * @.@@@@..@.
+     * @@.@@@@.@@
+     * .@@@@@@@.@
+     * .@.@.@.@@@
+     * @.@@@.@@@@
+     * .@@@@@@@@.
+     * @.@.@@@.@.
+     *
+     * The forklifts can only access a roll of paper if there are fewer than four rolls of paper in the eight adjacent positions.
+     * If you can figure out which rolls of paper the forklifts can access, they'll spend less time looking and more time breaking down the wall to the cafeteria.
+     *
+     * In this example, there are 13 rolls of paper that can be accessed by a forklift (marked with x):
+     *
+     * ..xx.xx@x.
+     * x@@.@.@.@@
+     * @@@@@.x.@@
+     * @.@@@@..@.
+     * x@.@@@@.@x
+     * .@@@@@@@.@
+     * .@.@.@.@@@
+     * x.@@@.@@@@
+     * .@@@@@@@@.
+     * x.x.@@@.x.
+     * Consider your complete diagram of the paper roll locations. How many rolls of paper can be accessed by a forklift?
+     *
+     *
      */
 
     /**
@@ -28,31 +61,77 @@ fun main() {
              submit2 = false,
              check1 = false,
              check2 = false,
-             checkDemo1 = false,
+             checkDemo1 = true,
              checkDemo2 = false,
              execute1 = false,
              execute2 = false,
-             execute1demo = true,
-             execute2demo = false,
-             exampleSolution1 = 0,
+             execute1demo = false,
+             execute2demo = true,
+             exampleSolution1 = 13,
              exampleSolution2 = 0,
-             solution1 = 0,
+             solution1 = 1478,
              solution2 = 0)
+    fun hasLessThanNeighbours(grid: List<List<Char>>, n: Int, row: Int,col: Int): Boolean {
+        var neighbours = 0
+        for(adjust in AdjacentPositions.entries) {
+            val r = row + adjust.row
+            val c = col + adjust.col
+            try {
+                val isEmpty = grid.get(r).get(c) == '.'
+                if(!isEmpty) {
+                    neighbours++
+                }
+            } catch (e: Exception) {
 
-    fun solveDay4(input: List<String>, n: Int): Long {
+            }
+
+            if(neighbours >= n) {
+//                println("hasLessThanNeighbours: row: $row, col: $col, neighbours: $neighbours")
+                return false
+            }
+        }
+        return if(neighbours >= n) false else true
+    }
+
+    fun isRoll(c: Char): Boolean = c == '@'
+
+
+
+
+    fun part1(input: List<String>): Long {
+        val grid = splitIntoCharGrid(input)
+
+        var result = 0L
+        for ((rowIndex,row) in grid.withIndex()) {
+            for ((colIndex,col) in row.withIndex()) {
+                if (!isRoll(col)) continue
+                val hasLessThanNeighbours = hasLessThanNeighbours(grid,4,rowIndex,colIndex)
+                println("row: $rowIndex ($row), col: $colIndex ($col) | hasLess: ${hasLessThanNeighbours}")
+                result += if (hasLessThanNeighbours) 1 else 0
+            }
+        }
+
+        return result
+    }
+
+    fun solveDay4(grid: List<String>, n: Int): Long {
+        var result = 0L
+        for (row in grid) {
+            for (col in row) {
+
+            }
+        }
+
         return 0L
 
     }
-    fun part1(input: List<String>) = solveDay4(input,2)
-
-
     fun part2(input: List<String>) = solveDay4(input,12)
 
     try {
-        val exampleInput1 = readInput("day_04_demo", "2025")
         val exampleInput2 = readInput("day_04_demo", "2025")
         /* --- TEST DEMO INPUT --- */
         if(config.execute1demo) {
+            val exampleInput1 = readInput("day_04_demo", "2025")
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
@@ -75,7 +154,7 @@ fun main() {
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
             if(config.check1) check(part1Solution == config.solution1.toLong())
-            if(config.submit1) handleSubmit(2025,3,1,part1Solution.toString())
+            if(config.submit1) handleSubmit(2025,4,1,part1Solution.toString())
         }
 
         if(config.execute2) {
@@ -86,7 +165,7 @@ fun main() {
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
             if(config.check2) check(part2Solution == 0L)
-            if(config.submit2) handleSubmit(2025,3,2,part2Solution.toString())
+            if(config.submit2) handleSubmit(2025,4,2,part2Solution.toString())
         }
     } catch (t: Throwable) {
         t.printStackTrace()

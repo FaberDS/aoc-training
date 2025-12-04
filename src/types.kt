@@ -76,3 +76,14 @@ fun extractInstructions(line: String): Rotation? {
     return Rotation(dir, distance)
 
 }
+
+enum class AdjacentPositions(val row: Int, val col: Int) {
+    TOP_LEFT(-1, -1),
+    TOP_CENTER(-1, 0),
+    TOP_RIGHT(-1, +1),
+    LEFT(0, -1),
+    RIGHT(0, +1),
+    BOTTOM_LEFT(+1, -1),
+    BOTTOM_CENTER(+1, 0),
+    BOTTOM_RIGHT(+1, +1);
+}
