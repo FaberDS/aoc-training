@@ -18,6 +18,7 @@ if [ -z "$1" ]; then
     # No parameters -> try "today" logic
     if [ "$CURRENT_MONTH" = "12" ]; then
         DAY=$(printf "%02d" "$CURRENT_DAY")
+        DAY_UNPAD="$CURRENT_DAY"
         YEAR="$CURRENT_YEAR"
 
         # ⚠️ Match your actual filename pattern: Day_03__2025.kt
@@ -39,6 +40,7 @@ if [ -z "$1" ]; then
 else
     DAY=$(printf "%02d" "$1")      # Pad day to two digits (01, 02, etc.)
     YEAR=${2:-$CURRENT_YEAR}       # Use $2 if provided, otherwise use CURRENT_YEAR
+    DAY_UNPAD="$1"
 fi
 
 echo "Starting Advent of Code setup for $YEAR Day $DAY..."
@@ -56,7 +58,7 @@ mkdir -p "$YEAR_INPUT_DIR" "$YEAR_DAYS_DIR"
 # 2. Run the Kotlin Script via Gradle
 echo "-> Fetching input and creating Kotlin file..."
 # We pass -Pday and -Pyear to the Gradle task
-$GRADLE_TASK -Pday="$1" -Pyear="$YEAR"
+$GRADLE_TASK -Pday="$DAY_UNPAD" -Pyear="$YEAR"
 
 # Check the exit status of the Gradle command
 if [ $? -ne 0 ]; then
