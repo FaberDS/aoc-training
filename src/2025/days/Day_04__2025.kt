@@ -58,17 +58,17 @@ fun main() {
      */
     val config = ConfigForDay(
              submit1 = false,
-             submit2 = false,
+             submit2 = true,
              check1 = false,
              check2 = false,
              checkDemo1 = true,
-             checkDemo2 = false,
+             checkDemo2 = true,
              execute1 = false,
-             execute2 = false,
-             execute1demo = false,
+             execute2 = true,
+             execute1demo = true,
              execute2demo = true,
              exampleSolution1 = 13,
-             exampleSolution2 = 0,
+             exampleSolution2 = 43,
              solution1 = 1478,
              solution2 = 0)
     fun hasLessThanNeighbours(grid: List<List<Char>>, n: Int, row: Int,col: Int): Boolean {
@@ -113,19 +113,37 @@ fun main() {
 
         return result
     }
-
-    fun solveDay4(grid: List<String>, n: Int): Long {
-        var result = 0L
-        for (row in grid) {
-            for (col in row) {
-
+    fun removeRolls(grid: MutableList<MutableList<Char>>): Pair<List<List<Char>>,Int> {
+        var removedRolls = 0
+        for ((rowIndex,row) in grid.withIndex()) {
+            for ((colIndex,col) in row.withIndex()) {
+                if (!isRoll(col)) continue
+                val hasLessThanNeighbours = hasLessThanNeighbours(grid,4,rowIndex,colIndex)
+//                println("row: $rowIndex ($row), col: $colIndex ($col) | hasLess: ${hasLessThanNeighbours}")
+                 if (hasLessThanNeighbours) {
+                     grid[rowIndex][colIndex] = '.'
+                     removedRolls += 1
+                 }
             }
         }
-
-        return 0L
-
+        return grid to removedRolls
     }
-    fun part2(input: List<String>) = solveDay4(input,12)
+    fun part2(input: List<String>): Long {
+        var grid = splitIntoCharGrid(input)
+
+        var result = 0L
+
+        var couldRemoveRolls = true
+        while (couldRemoveRolls) {
+            val (updatedGrid,removedCount) = removeRolls(grid as MutableList<MutableList<Char>>)
+            if (removedCount == 0) couldRemoveRolls = false
+            result += removedCount
+//            println("removedCount: $removedCount")
+            grid = updatedGrid
+        }
+
+        return result
+    }
 
     try {
         val exampleInput2 = readInput("day_04_demo", "2025")
@@ -142,7 +160,7 @@ fun main() {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == 0L)
+            if(config.checkDemo2) check(part2DemoSolution == 43L)
         }
 
         /* --- RUN FULL INPUT --- */
