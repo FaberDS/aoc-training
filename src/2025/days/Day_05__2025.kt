@@ -3,6 +3,7 @@
  * [Advent of code 2025-5 ](https://adventofcode.com/2025/day/5)
  **/
 import aoc.handleSubmit
+import datastructures.RangeNode
 import extensions.printSeparated
 import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle
 import kotlin.time.measureTimedValue
@@ -96,7 +97,27 @@ fun main() {
     }
     fun part2(lines: List<String>): Long {
         var validIds = 0L
+        val validRanges = mutableSetOf<Pair<Long,Long>>()
+        var validRangesCorrect = mutableListOf<Pair<Long,Long>>()
 
+        var rootNode: RangeNode? = null
+        for (line in lines) {
+            if (line.isEmpty()) {
+                break
+            }
+            val splited = line.split("-")
+            val rangeNode = RangeNode(splited[0].toLong(), splited[1].toLong())
+            if(rootNode == null) {
+                rootNode = rangeNode
+            } else {
+                rootNode.insertNode(rangeNode)
+            }
+            validRanges += Pair(splited[0].toLong(), splited[1].toLong())
+        }
+        println("validRanges: $validRanges")
+        println(rootNode)
+        val validCount = rootNode?.sumValidIds()
+        println("validCount: $validCount")
         return validIds
     }
 
