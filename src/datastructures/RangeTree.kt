@@ -18,50 +18,57 @@ class RangeNode(
 
     fun sumValidIds(): Long =
         (value + 1) +
-            (minNode?.sumValidIds() ?: 0L) +
-            (maxNode?.sumValidIds() ?: 0L)
+                (minNode?.sumValidIds() ?: 0L) +
+                (maxNode?.sumValidIds() ?: 0L)
+    private enum class Relation {
+        INSIDE,
+        LEFT,
+        RIGHT,
+        OVERLAP
+    }
+
+    private fun relationTo(node: RangeNode): Relation =
+        when {
+            node.min >= min && node.max <= max -> Relation.INSIDE
+            node.max < min                     -> Relation.LEFT
+            node.min > max                     -> Relation.RIGHT
+            else                               -> Relation.OVERLAP
+        }
 
     fun insertNode(node: RangeNode) {
-        val baseString =
-            "insertNode: [${node.min}, ${node.max}]  +\n into [${this.min}, ${this.max}] with: minNode == null ${minNode == null} |maxNode == null ${maxNode == null}"
-
-        if (node.min >= min && node.max <= max) {
-//            println("$baseString \n -> INSIDE (no-op)")
-            return
-        }
-
-        else if (node.max < min) {
-//            println("$baseString \n -> LEFT (go to minNode)")
-            if (minNode == null) {
-                minNode = node
-            } else {
-                minNode!!.insertNode(node)
+        when (relationTo(node)) {
+            Relation.INSIDE -> {
+                return
             }
-            return
-        }
 
-        else if (node.min > max) {
-//            println("$baseString \n -> RIGHT (go to maxNode)")
-            if (maxNode == null) {
-                maxNode = node
-            } else {
-                maxNode!!.insertNode(node)
+            Relation.LEFT -> {
+                if (minNode == null) {
+                    minNode = node
+                } else {
+                    minNode!!.insertNode(node)
+                }
             }
-            return
+
+            Relation.RIGHT -> {
+                if (maxNode == null) {
+                    maxNode = node
+                } else {
+                    maxNode!!.insertNode(node)
+                }
+            }
+
+            Relation.OVERLAP -> {
+                extendAndReinsert(node)
+            }
         }
+    }
 
-//        println("$baseString \n -> OVERLAP (EXTEND / MERGE)")
-
-        val oldMin = min
-        val oldMax = max
-
+    private fun extendAndReinsert(node: RangeNode) {
         if (node.min < min) {
             min = node.min
-//            println("$baseString \n -> EXTEND_MIN ($oldMin -> $min)")
         }
         if (node.max > max) {
             max = node.max
-//            println("$baseString \n -> EXTEND_MAX ($oldMax -> $max)")
         }
         updateValue()
 
@@ -71,12 +78,10 @@ class RangeNode(
         maxNode = null
 
         if (oldLeft != null) {
-//            println("$baseString \n -> REINSERT LEFT SUBTREE")
             reinsertSubtree(oldLeft)
         }
 
         if (oldRight != null) {
-//            println("$baseString \n -> REINSERT RIGHT SUBTREE")
             reinsertSubtree(oldRight)
         }
     }
@@ -87,7 +92,6 @@ class RangeNode(
         node.minNode = null
         node.maxNode = null
 
-//        println("reinsertSubtree: reinserting [${node.min}, ${node.max}] into root [${this.min}, ${this.max}]")
         insertNode(node)
 
         if (left != null) reinsertSubtree(left)
