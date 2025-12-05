@@ -3,9 +3,7 @@
  * [Advent of code 2025-5 ](https://adventofcode.com/2025/day/5)
  **/
 import aoc.handleSubmit
-import datastructures.RangeNode
 import extensions.printSeparated
-import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle
 import kotlin.time.measureTimedValue
 
 /**
@@ -43,18 +41,19 @@ fun main() {
      val config = ConfigForDay(
              submit1 = false,
              submit2 = false,
-             check1 = false,
-             check2 = false,
-             checkDemo1 = false,
-             checkDemo2 = false,
-             execute1 = false,
-             execute2 = false,
+             check1 = true,
+             check2 = true,
+             checkDemo1 = true,
+             checkDemo2 = true,
+             execute1 = true,
+             execute2 = true,
              execute1demo = false,
              execute2demo = true,
              exampleSolution1 = 3,
              exampleSolution2 = 14,
              solution1 = 756,
              solution2 = 0)
+
     fun isIdValid(id: Long, validRanges: Set<Pair<Long,Long>> ): Boolean {
         for (range in validRanges) {
             if (id in range.first..range.second) { return true}
@@ -81,25 +80,8 @@ fun main() {
         }
         return validIds
     }
-    fun isRangeInValidRanges(range: Pair<Long,Long>,validRangesCorrect:MutableList<Pair<Long,Long>>): MutableList<Pair<Long,Long>> {
-        for((validIndex,validRange) in validRangesCorrect.withIndex()) {
-            println("validRanges: range: $range | validRangesCorrect: $validIndex -> $validRange | range.first: ${range.first} | validRange.first: ${validRange.first} | validRange.second: ${validRange.second}")
-            if (range.first in validRange.first..validRange.second) {
-                if (range.second in validRange.first..validRange.second) {continue}
-                validRangesCorrect[validIndex] = validRange.first to range.second
-            } else if (range.second in validRange.first..validRange.second) {
-                validRangesCorrect[validIndex] = range.first to validRange.second
-            } else {
-                validRangesCorrect.add(range)
-            }
-        }
-        return validRangesCorrect
-    }
-    fun part2(lines: List<String>): Long {
-        var validIds = 0L
-        val validRanges = mutableSetOf<Pair<Long,Long>>()
-        var validRangesCorrect = mutableListOf<Pair<Long,Long>>()
 
+    fun part2(lines: List<String>): Long {
         var rootNode: RangeNode? = null
         for (line in lines) {
             if (line.isEmpty()) {
@@ -112,13 +94,11 @@ fun main() {
             } else {
                 rootNode.insertNode(rangeNode)
             }
-            validRanges += Pair(splited[0].toLong(), splited[1].toLong())
         }
-        println("validRanges: $validRanges")
-        println(rootNode)
+//        println(rootNode)
+//        rootNode?.printTree()
         val validCount = rootNode?.sumValidIds()
-        println("validCount: $validCount")
-        return validIds
+        return validCount ?: 0
     }
 
     try {
@@ -158,7 +138,7 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == config.solution2.toLong())
+            if(config.check2) check(part2Solution == 355555479253787)
             if(config.submit2) handleSubmit(2025,5,2,part2Solution.toString())
         }
     } catch (t: Throwable) {
