@@ -11,7 +11,7 @@ fun Long.isInvalidId(): Boolean {
         val unit = s.substring(0, len)
         val times = n / len
         val matchString = unit.repeat(times) == s
-//            println("isInvalid: s: $s, n: $n, unit: $unit, times: $times | $matchString")
+//            utils.println("isInvalid: s: $s, n: $n, unit: $unit, times: $times | $matchString")
         // times is >= 2 here because len <= n/2
         if (matchString) {
             return true

@@ -1,9 +1,11 @@
+package aoc
+
 import java.io.File
 import java.net.URI
 import java.util.*
 
 // --- CONFIGURATION ---
-// AOC_YEAR is now a variable passed to main and functions.
+// AOC_YEAR is now a variable passed to aoc.main and functions.
 const val AOC_INPUT_BASE_URL = "https://adventofcode.com"
 const val ENV_FILE_PATH = ".env"
 // ---------------------

@@ -1,3 +1,5 @@
+package datastructures
+
 open class Grid<T>(
     val grid: MutableList<MutableList<T>>
 ) {
@@ -38,7 +40,7 @@ class IntGridFromString(input: String) : Grid<Int>(
         .map { line ->
             line.map { ch ->
                 ch.digitToIntOrNull()
-                    ?: error("Non-digit '$ch' in IntGridFromString")
+                    ?: error("Non-digit '$ch' in datastructures.IntGridFromString")
             }.toMutableList()
         }.toMutableList()
 ) {

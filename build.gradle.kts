@@ -11,7 +11,7 @@ sourceSets {
 
 
 tasks.register<JavaExec>("fetchInput") {
-    mainClass.set("Fetch_inputKt")
+    mainClass.set("aoc.Fetch_inputKt")
 
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`

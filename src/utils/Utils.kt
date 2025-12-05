@@ -1,3 +1,6 @@
+package utils
+
+import datastructures.Coord
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
@@ -13,7 +16,7 @@ fun readInput(name: String, year: String = "2024"): List<String> =
     Path("src/$year/input/$name.txt").readText().trim().lines()
 
 /**
- * Converts string to md5 hash.
+ * Converts string to utils.md5 hash.
  */
 fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
     .toString(16)

@@ -13,8 +13,12 @@
  * M.M.M.M.M.
  * ..........
  **/
+ import datastructures.Coord
  import extensions.printSeparated
  import extensions.safeGet
+ import utils.findCoordsForChar
+ import utils.readInput
+ import utils.splitIntoCharGrid
  import kotlin.Char
  import kotlin.time.measureTimedValue
 
@@ -26,55 +30,55 @@ fun main() {
     /**
     * Helper Part 1
      */
-    fun testXmasHorizontal(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasHorizontal(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row,a.col+1) == 'M' &&
                 grid.safeGet(a.row,a.col+2) == 'A' &&
                 grid.safeGet(a.row,a.col+3) == 'S'
     }
-    fun testXmasHorizontalBackward(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasHorizontalBackward(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row,a.col-1) == 'M' &&
                 grid.safeGet(a.row,a.col-2) == 'A' &&
                 grid.safeGet(a.row,a.col-3) == 'S'
     }
-    fun testXmasVertical(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasVertical(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row+1,a.col) == 'M' &&
                 grid.safeGet(a.row+2,a.col) == 'A' &&
                 grid.safeGet(a.row+3,a.col) == 'S'
     }
-    fun testXmasVerticalBackward(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasVerticalBackward(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row-1,a.col) == 'M' &&
                 grid.safeGet(a.row-2,a.col) == 'A' &&
                 grid.safeGet(a.row-3,a.col) == 'S'
     }
-    fun testXmasDiagonalLeftUp(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasDiagonalLeftUp(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row-1,a.col-1) == 'M' &&
                 grid.safeGet(a.row-2,a.col-2) == 'A' &&
                 grid.safeGet(a.row-3,a.col-3) == 'S'
     }
-    fun testXmasDiagonalLeftDown(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasDiagonalLeftDown(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row+1,a.col-1) == 'M' &&
                 grid.safeGet(a.row+2,a.col-2) == 'A' &&
                 grid.safeGet(a.row+3,a.col-3) == 'S'
     }
-    fun testXmasDiagonalRightDown(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasDiagonalRightDown(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row+1,a.col+1) == 'M' &&
                 grid.safeGet(a.row+2,a.col+2) == 'A' &&
                 grid.safeGet(a.row+3,a.col+3) == 'S'
     }
-    fun testXmasDiagonalRightUp(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testXmasDiagonalRightUp(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row,a.col) == 'X' &&
                 grid.safeGet(a.row-1,a.col+1) == 'M' &&
                 grid.safeGet(a.row-2,a.col+2) == 'A' &&
                 grid.safeGet(a.row-3,a.col+3) == 'S'
     }
-    fun matchXmas(grid: List<List<Char>>, m:Coord,a:Coord,s:Coord): Boolean {
+    fun matchXmas(grid: List<List<Char>>, m: Coord, a: Coord, s: Coord): Boolean {
         return grid[m.row][m.col] == 'M' && grid[a.row][a.col] == 'A' && grid[s.row][s.col] == 'S'
     }
 
@@ -86,7 +90,7 @@ fun main() {
      * .A.
      * M.S
      */
-    fun testMas(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testMas(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row-1,a.col-1) == 'M' &&
                 grid.safeGet(a.row+1,a.col-1) == 'M' &&
                 grid.safeGet(a.row-1,a.col+1) == 'S' &&
@@ -98,7 +102,7 @@ fun main() {
      * .A.
      * S.S
      */
-    fun testMas90Degree(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testMas90Degree(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row-1,a.col-1) == 'M' &&
                 grid.safeGet(a.row+1,a.col-1) == 'S' &&
                 grid.safeGet(a.row-1,a.col+1) == 'M' &&
@@ -110,7 +114,7 @@ fun main() {
      * .A.
      * M.M
      */
-    fun testMas270Degree(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testMas270Degree(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row-1,a.col-1) == 'S' &&
                 grid.safeGet(a.row+1,a.col-1) == 'M' &&
                 grid.safeGet(a.row-1,a.col+1) == 'S' &&
@@ -123,7 +127,7 @@ fun main() {
      * .A.
      * S.M
      */
-    fun testSam(grid: List<List<Char>>, a:Coord): Boolean {
+    fun testSam(grid: List<List<Char>>, a: Coord): Boolean {
         return grid.safeGet(a.row-1,a.col-1)== 'S' &&
                 grid.safeGet(a.row+1,a.col-1) == 'S' &&
                 grid.safeGet(a.row-1,a.col+1) == 'M' &&
@@ -136,7 +140,7 @@ fun main() {
     fun part1(input: List<String>): Int {
         var count = 0
         val grid = splitIntoCharGrid(input)
-        val coords = findCoordsForChar('X',grid)
+        val coords = findCoordsForChar('X', grid)
 
         val height = grid.size
         val width = grid.first().size
@@ -145,37 +149,53 @@ fun main() {
             val col = coord.col
             if(row >= 3) {
                 // investigate up
-                if(matchXmas(grid.toList(), Coord(row-1,col),Coord(row-2,col),Coord(row-3,col))) count++
+                if(matchXmas(grid.toList(), Coord(row - 1, col), Coord(row - 2, col), Coord(row - 3, col))) count++
                 if(col >= 3){
                     // investigate left up diagonal
-                    if(matchXmas(grid.toList(), Coord(row-1,col-1),Coord(row-2,col-2),Coord(row-3,col-3))) count++
+                    if(matchXmas(grid.toList(),
+                            Coord(row - 1, col - 1),
+                            Coord(row - 2, col - 2),
+                            Coord(row - 3, col - 3)
+                        )) count++
                 }
                 if(col < width -3){
                     // investigate right up diagonal
-                    if(matchXmas(grid.toList(), Coord(row-1,col+1),Coord(row-2,col+2),Coord(row-3,col+3))) count++
+                    if(matchXmas(grid.toList(),
+                            Coord(row - 1, col + 1),
+                            Coord(row - 2, col + 2),
+                            Coord(row - 3, col + 3)
+                        )) count++
                 }
             }
             if(row < height -3){
                 // investigate down
-                if(matchXmas(grid.toList(), Coord(row+1,col),Coord(row+2,col),Coord(row+3,col))) count++
+                if(matchXmas(grid.toList(), Coord(row + 1, col), Coord(row + 2, col), Coord(row + 3, col))) count++
 
                 if(col >= 3){
                     // investigate left down diagonal
-                    if(matchXmas(grid.toList(), Coord(row+1,col-1),Coord(row+2,col-2),Coord(row+3,col-3))) count++
+                    if(matchXmas(grid.toList(),
+                            Coord(row + 1, col - 1),
+                            Coord(row + 2, col - 2),
+                            Coord(row + 3, col - 3)
+                        )) count++
                 }
                 if(col < width -3){
                     // investigate right down diagonal
-                    if(matchXmas(grid.toList(), Coord(row+1,col+1),Coord(row+2,col+2),Coord(row+3,col+3))) count++
+                    if(matchXmas(grid.toList(),
+                            Coord(row + 1, col + 1),
+                            Coord(row + 2, col + 2),
+                            Coord(row + 3, col + 3)
+                        )) count++
                 }
             }
             if(col < width -3){
                 // investigate right
-                if(matchXmas(grid.toList(), Coord(row,col+1),Coord(row,col+2),Coord(row,col+3))) count++
+                if(matchXmas(grid.toList(), Coord(row, col + 1), Coord(row, col + 2), Coord(row, col + 3))) count++
 
             }
             if(col >= 3){
                 // investigate left
-                if(matchXmas(grid.toList(), Coord(row,col-1),Coord(row,col-2),Coord(row,col-3))) count++
+                if(matchXmas(grid.toList(), Coord(row, col - 1), Coord(row, col - 2), Coord(row, col - 3))) count++
             }
         }
         return count
@@ -207,7 +227,7 @@ fun main() {
     fun part2(input: List<String>): Int {
         var count = 0
         val grid = splitIntoCharGrid(input)
-        val coords = findCoordsForChar('A',grid)
+        val coords = findCoordsForChar('A', grid)
         for(coord in coords){
 
             if(testMas(grid,coord)) count++
@@ -227,7 +247,7 @@ fun main() {
      **************************************/
     fun part2Ref(input: List<String>): Int {
         val grid = splitIntoCharGrid(input)
-        val coords = findCoordsForChar('A',grid)
+        val coords = findCoordsForChar('A', grid)
         var patternTests = listOf(::testMas,::testSam,::testMas270Degree,::testMas90Degree)
         val count = coords.sumOf { coord ->
             patternTests.count { testFunction ->
@@ -259,7 +279,7 @@ fun main() {
 
         /* --- RUN FULL INPUT ---
             Reads input from the file src/2024/input/day_04.txt
-            NOTE: You need to implement or import the readInput function. */
+            NOTE: You need to implement or import the utils.readInput function. */
 
 
         "Part 1".printSeparated()
