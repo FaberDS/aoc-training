@@ -1,3 +1,5 @@
+package datastructures
+
 /**
  * Basic Coordinate type
  */

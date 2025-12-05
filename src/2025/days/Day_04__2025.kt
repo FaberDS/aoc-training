@@ -3,13 +3,12 @@
  * [Advent of code 2025-3 ](https://adventofcode.com/2025/day/4)
  **/
 import aoc.handleSubmit
-import com.sun.org.apache.xalan.internal.lib.ExsltMath.highest
-import extensions.findMaxNumberWithNDigits
-import extensions.firstElement
+import datastructures.CharGridFromString
+import datastructures.ConfigForDay
+import datastructures.cellsWithLessThanNNeighbours
+import datastructures.removeRollsWithLessThanNNeighbours
 import extensions.printSeparated
-import extensions.removeFirstElement
-import kotlin.collections.first
-import kotlin.text.indexOf
+import utils.readInput
 import kotlin.time.measureTimedValue
 
 
@@ -57,20 +56,21 @@ fun main() {
 
      */
     val config = ConfigForDay(
-             submit1 = false,
-             submit2 = false,
-             check1 = true,
-             check2 = false,
-             checkDemo1 = true,
-             checkDemo2 = true,
-             execute1 = true,
-             execute2 = true,
-             execute1demo = true,
-             execute2demo = true,
-             exampleSolution1 = 13,
-             exampleSolution2 = 43,
-             solution1 = 1478,
-             solution2 = 9120)
+        submit1 = false,
+        submit2 = false,
+        check1 = true,
+        check2 = false,
+        checkDemo1 = true,
+        checkDemo2 = true,
+        execute1 = true,
+        execute2 = true,
+        execute1demo = true,
+        execute2demo = true,
+        exampleSolution1 = 13,
+        exampleSolution2 = 43,
+        solution1 = 1478,
+        solution2 = 9120
+    )
 
 
     fun part1(lines: List<String>): Long = CharGridFromString(lines).cellsWithLessThanNNeighbours(4).toLong()

@@ -3,6 +3,8 @@
  * [Advent of code 2024-3 ](https://adventofcode.com/2024/day/3)
  **/
  import extensions.printSeparated
+ import utils.println
+ import utils.readInput
 
 
 fun main() {
@@ -69,7 +71,7 @@ fun main() {
         
 //         --- RUN FULL INPUT ---
 //         Reads input from the file src/2024/input/day_03.txt
-//         NOTE: You need to implement or import the readInput function.
+//         NOTE: You need to implement or import the utils.readInput function.
         val input = readInput("day_03", "2024")
 
         val part1_solution = part1(input)

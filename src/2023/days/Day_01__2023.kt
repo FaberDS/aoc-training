@@ -3,26 +3,31 @@
  * [Advent of code 2023-1 ](https://adventofcode.com/2023/day/1)
  **/
  import aoc.handleSubmit
+ import datastructures.ConfigForDay
+ import datastructures.getAlphabeticNumber
  import extensions.printSeparated
+ import utils.getAlphaNumericRegex
+ import utils.readInput
  import kotlin.time.measureTimedValue
 
 
 fun main() {
     val config = ConfigForDay(
-         submit1 = false,
-         submit2 = false,
-         check1 = true,
-         check2 = true,
-         checkDemo1 = false,
-         checkDemo2 = false,
+        submit1 = false,
+        submit2 = false,
+        check1 = true,
+        check2 = true,
+        checkDemo1 = false,
+        checkDemo2 = false,
         execute1 = true,
         execute2 = true,
         execute1demo = true,
         execute2demo = true,
-         exampleSolution1 = 142,
-         exampleSolution2 = 281,
-         solution1 = 54634,
-         solution2 = 53855)
+        exampleSolution1 = 142,
+        exampleSolution2 = 281,
+        solution1 = 54634,
+        solution2 = 53855
+    )
 
     fun extractNumbers(line: String, regex: Regex): Int {
         val digits = regex.findAll(line)

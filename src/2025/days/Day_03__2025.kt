@@ -3,13 +3,10 @@
  * [Advent of code 2025-3 ](https://adventofcode.com/2025/day/3)
  **/
 import aoc.handleSubmit
-import com.sun.org.apache.xalan.internal.lib.ExsltMath.highest
+import datastructures.ConfigForDay
 import extensions.findMaxNumberWithNDigits
-import extensions.firstElement
 import extensions.printSeparated
-import extensions.removeFirstElement
-import kotlin.collections.first
-import kotlin.text.indexOf
+import utils.readInput
 import kotlin.time.measureTimedValue
 
 
@@ -54,20 +51,21 @@ fun main() {
      * The total output joltage is now much larger: 987654321111 + 811111111119 + 434234234278 + 888911112111 = 3121910778619.
      */
     val config = ConfigForDay(
-             submit1 = false,
-             submit2 = false,
-             check1 = true,
-             check2 = true,
-             checkDemo1 = true,
-             checkDemo2 = true,
-             execute1 = true,
-             execute2 = true,
-             execute1demo = true,
-             execute2demo = true,
-             exampleSolution1 = 357,
-             exampleSolution2 = 0,
-             solution1 = 17193,
-             solution2 = 0)
+        submit1 = false,
+        submit2 = false,
+        check1 = true,
+        check2 = true,
+        checkDemo1 = true,
+        checkDemo2 = true,
+        execute1 = true,
+        execute2 = true,
+        execute1demo = true,
+        execute2demo = true,
+        exampleSolution1 = 357,
+        exampleSolution2 = 0,
+        solution1 = 17193,
+        solution2 = 0
+    )
 
     fun solveDay3(input: List<String>, n: Int): Long {
         return input

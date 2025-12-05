@@ -3,13 +3,11 @@
  * [Advent of code 2025-2 ](https://adventofcode.com/2025/day/2)
  **/
 import aoc.handleSubmit
-import extensions.allCharsSame
+import datastructures.ConfigForDay
 import extensions.isInvalidId
-import extensions.isRepeatingPattern
 import extensions.printSeparated
 import extensions.splitInHalf
-import javax.swing.text.html.HTML.Attribute.N
-import kotlin.math.floor
+import utils.readInput
 import kotlin.time.measureTimedValue
 
 //    PART- 1
@@ -61,7 +59,8 @@ fun main() {
         exampleSolution1 = 1227775554,
         exampleSolution2 = 0,
         solution1 = 0,
-        solution2 = 0)
+        solution2 = 0
+    )
 
     fun parseRanges(lines: List<String>): MutableList<Pair<Long, Long>> {
         val ranges = mutableListOf<Pair<Long,Long>>()
@@ -105,7 +104,7 @@ fun main() {
     }
 
     fun part1(input: List<String>): Long {
-//        println("🙈MAX INT: ${Int.MAX_VALUE}")
+//        utils.println("🙈MAX INT: ${Int.MAX_VALUE}")
         val ranges = parseRanges(input)
         var result: Long = 0
         ranges.forEach {

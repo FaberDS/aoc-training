@@ -1,4 +1,6 @@
 import aoc.handleSubmit
+import utils.readInput
+import utils.splitInput
 import kotlin.math.abs
 
 /**
@@ -38,7 +40,7 @@ fun main() {
     }
     try {
 
-        val input = readInput("day_01","2024")
+        val input = readInput("day_01", "2024")
 
         val part1_solution = part1(input)
         println("Part 1: $part1_solution")

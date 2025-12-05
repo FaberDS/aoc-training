@@ -2,10 +2,13 @@
  * Advent of code (2025) solution for day 1 by Denis Schüle.
  * [Advent of code 2025-1 ](https://adventofcode.com/2025/day/1)
  **/
-import Rotation
-import RotationDirection
 import aoc.handleSubmit
+import datastructures.ConfigForDay
+import datastructures.Rotation
+import datastructures.RotationDirection
+import datastructures.extractInstructions
 import extensions.printSeparated
+import utils.readInput
 import kotlin.time.measureTimedValue
 
 enum class CountMode {
@@ -17,20 +20,21 @@ fun main() {
 
 
      val config = ConfigForDay(
-             submit1 = false,
-             submit2 = false,
-             check1 = true,
-             check2 = true,
-             checkDemo1 = true,
-             checkDemo2 = true,
-             execute1 = true,
-             execute2 = true,
-             execute1demo = true,
-             execute2demo = true,
-             exampleSolution1 = 3,
-             exampleSolution2 = 6,
-             solution1 = 1092,
-             solution2 = 6616) //wrong: 2624, 4936,7708
+         submit1 = false,
+         submit2 = false,
+         check1 = true,
+         check2 = true,
+         checkDemo1 = true,
+         checkDemo2 = true,
+         execute1 = true,
+         execute2 = true,
+         execute1demo = true,
+         execute2demo = true,
+         exampleSolution1 = 3,
+         exampleSolution2 = 6,
+         solution1 = 1092,
+         solution2 = 6616
+     ) //wrong: 2624, 4936,7708
 
     fun rotate(rotation: Rotation, position: Int): Pair<Int, Int> {
         val step = if (rotation.direction == RotationDirection.RIGHT) 1 else -1

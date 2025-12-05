@@ -3,7 +3,9 @@
  * [Advent of code 2025-5 ](https://adventofcode.com/2025/day/5)
  **/
 import aoc.handleSubmit
+import datastructures.ConfigForDay
 import extensions.printSeparated
+import utils.readInput
 import kotlin.time.measureTimedValue
 
 /**
@@ -39,20 +41,21 @@ import kotlin.time.measureTimedValue
 fun main() {
 
      val config = ConfigForDay(
-             submit1 = false,
-             submit2 = false,
-             check1 = true,
-             check2 = true,
-             checkDemo1 = true,
-             checkDemo2 = true,
-             execute1 = true,
-             execute2 = true,
-             execute1demo = false,
-             execute2demo = true,
-             exampleSolution1 = 3,
-             exampleSolution2 = 14,
-             solution1 = 756,
-             solution2 = 0)
+         submit1 = false,
+         submit2 = false,
+         check1 = true,
+         check2 = true,
+         checkDemo1 = true,
+         checkDemo2 = true,
+         execute1 = true,
+         execute2 = true,
+         execute1demo = false,
+         execute2demo = true,
+         exampleSolution1 = 3,
+         exampleSolution2 = 14,
+         solution1 = 756,
+         solution2 = 0
+     )
 
     fun isIdValid(id: Long, validRanges: Set<Pair<Long,Long>> ): Boolean {
         for (range in validRanges) {
@@ -95,7 +98,7 @@ fun main() {
                 rootNode.insertNode(rangeNode)
             }
         }
-//        println(rootNode)
+//        utils.println(rootNode)
 //        rootNode?.printTree()
         val validCount = rootNode?.sumValidIds()
         return validCount ?: 0
