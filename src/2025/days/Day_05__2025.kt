@@ -4,8 +4,38 @@
  **/
 import aoc.handleSubmit
 import extensions.printSeparated
+import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle
 import kotlin.time.measureTimedValue
 
+/**
+ * Part-1
+ * The database operates on ingredient IDs. It consists of a list of fresh ingredient ID ranges, a blank line, and a list of available ingredient IDs. For example:
+ *
+ * 3-5
+ * 10-14
+ * 16-20
+ * 12-18
+ *
+ * 1
+ * 5
+ * 8
+ * 11
+ * 17
+ * 32
+ * The fresh ID ranges are inclusive: the range 3-5 means that ingredient IDs 3, 4, and 5 are all fresh. The ranges can also overlap; an ingredient ID is fresh if it is in any range.
+ *
+ * The Elves are trying to determine which of the available ingredient IDs are fresh. In this example, this is done as follows:
+ *
+ * Ingredient ID 1 is spoiled because it does not fall into any range.
+ * Ingredient ID 5 is fresh because it falls into range 3-5.
+ * Ingredient ID 8 is spoiled.
+ * Ingredient ID 11 is fresh because it falls into range 10-14.
+ * Ingredient ID 17 is fresh because it falls into range 16-20 as well as range 12-18.
+ * Ingredient ID 32 is spoiled.
+ * So, in this example, 3 of the available ingredient IDs are fresh.
+ *
+ *
+ */
 
 fun main() {
 
@@ -18,21 +48,56 @@ fun main() {
              checkDemo2 = false,
              execute1 = false,
              execute2 = false,
-             execute1demo = true,
-             execute2demo = false,
-             exampleSolution1 = 0,
-             exampleSolution2 = 0,
-             solution1 = 0,
+             execute1demo = false,
+             execute2demo = true,
+             exampleSolution1 = 3,
+             exampleSolution2 = 14,
+             solution1 = 756,
              solution2 = 0)
-
-    fun part1(input: List<String>): Int {
-        var result = 0
-        return result
+    fun isIdValid(id: Long, validRanges: Set<Pair<Long,Long>> ): Boolean {
+        for (range in validRanges) {
+            if (id in range.first..range.second) { return true}
+        }
+        return false
     }
+    fun part1(lines: List<String>): Int {
+        var validIds = 0
+        val validRanges = mutableSetOf<Pair<Long,Long>>()
+        var readRanges = true
+        for (line in lines) {
+            if (line.isEmpty()) {
+                readRanges = false
+                continue
+            }
+            if (readRanges) {
+                val splited = line.split("-")
+                validRanges += Pair(splited[0].toLong(), splited[1].toLong())
 
-    fun part2(input: List<String>): Int {
-        var result = 0
-        return result
+            } else {
+                val id = line.toLong()
+                validIds += if(isIdValid(id,validRanges)) 1 else 0
+            }
+        }
+        return validIds
+    }
+    fun isRangeInValidRanges(range: Pair<Long,Long>,validRangesCorrect:MutableList<Pair<Long,Long>>): MutableList<Pair<Long,Long>> {
+        for((validIndex,validRange) in validRangesCorrect.withIndex()) {
+            println("validRanges: range: $range | validRangesCorrect: $validIndex -> $validRange | range.first: ${range.first} | validRange.first: ${validRange.first} | validRange.second: ${validRange.second}")
+            if (range.first in validRange.first..validRange.second) {
+                if (range.second in validRange.first..validRange.second) {continue}
+                validRangesCorrect[validIndex] = validRange.first to range.second
+            } else if (range.second in validRange.first..validRange.second) {
+                validRangesCorrect[validIndex] = range.first to validRange.second
+            } else {
+                validRangesCorrect.add(range)
+            }
+        }
+        return validRangesCorrect
+    }
+    fun part2(lines: List<String>): Long {
+        var validIds = 0L
+
+        return validIds
     }
 
     try {
@@ -50,7 +115,7 @@ fun main() {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2.toLong())
         }
 
         /* --- RUN FULL INPUT --- */
@@ -72,7 +137,7 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == config.solution2)
+            if(config.check2) check(part2Solution == config.solution2.toLong())
             if(config.submit2) handleSubmit(2025,5,2,part2Solution.toString())
         }
     } catch (t: Throwable) {
