@@ -101,6 +101,7 @@ fun createKotlinFiles(day: Int, year: Int) {
     val solutionFile = File(daysDir, "Day_${dayPadded}__$year.kt")
     val testFile = File(testDir, "Day_${dayPadded}__${year}_Test.kt")
     val demoFile = File(inputDir, "day_${dayPadded}_demo.txt")
+    val demo2File = File(inputDir, "day_${dayPadded}_2_demo.txt")
 
     // --- solution file ---
     if (solutionFile.exists()) {
@@ -139,6 +140,11 @@ fun createKotlinFiles(day: Int, year: Int) {
         inputDir.mkdirs()
         demoFile.writeText("# Add your demo input here\n")
         println("📝 Created demo input file: ${demoFile.path}")
+    }
+    if (!demo2File.exists()) {
+        inputDir.mkdirs()
+        demo2File.writeText("# Add your demo input here\n")
+        println("📝 Created demo input file: ${demo2File.path}")
     }
 }
 

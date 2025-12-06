@@ -126,12 +126,14 @@ fun main(args: Array<String>) {
     val solutionFilePath = "src/$year/days/Day_${dayPadded}__${year}.kt"
     val inputFilePath    = "src/$year/input/day_${dayPadded}.txt"
     val demoInputPath    = "src/$year/input/day_${dayPadded}_demo.txt"
-    val testFilePath     = "src/test/$year/Day_${dayPadded}__${year}_Test.kt"
+    val demoInput2Path    = "src/$year/input/day_${dayPadded}_2_demo.txt"
+    val testFilePath     = "src/test/kotlin/$year/Day_${dayPadded}__${year}_Test.kt"
 
     println("-> Adding new files to Git staging area...")
     runCommand("git", "add", solutionFilePath)
     runCommand("git", "add", "-f", inputFilePath)
     runCommand("git", "add", "-f", demoInputPath)
+    runCommand("git", "add", "-f", demoInput2Path)
     runCommand("git", "add", testFilePath)
     runCommand("git", "add", "src/$year/days")
     runCommand("git", "add", "src/$year/input")
