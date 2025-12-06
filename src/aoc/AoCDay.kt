@@ -28,7 +28,7 @@ abstract class AoCDay<T>(
         try {
             if (runExamples) {
                 val exampleInput1 = readInput("day_${dayPadded}_demo", "$year")
-                val exampleInput2 = readInput("day_${dayPadded}_02_demo", "$year")
+                val exampleInput2 = readInput("day_${dayPadded}_2_demo", "$year")
 
                 if (runPart1) {
                     "Part 1 Demo".printSeparated()
