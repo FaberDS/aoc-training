@@ -5,6 +5,15 @@ plugins {
 sourceSets {
     main {
         kotlin.srcDir("src")
+
+        kotlin.exclude("test/**")
+        kotlin.exclude(".idea/**")
+        kotlin.exclude(".gradle/**")
+
+        resources.srcDir("src/main/resources")
+    }
+    test{
+        kotlin.srcDir("test")
     }
 }
 
