@@ -1,6 +1,7 @@
 package aoc
 
 import java.io.File
+import java.lang.ProcessBuilder.Redirect.to
 import java.time.LocalDate
 
 private fun runCommand(vararg cmd: String): Int {
@@ -72,11 +73,13 @@ fun main(args: Array<String>) {
         }
 
         if (branchExists(branchName)) {
-            println("❌ Branch '$branchName' already exists. Aborting setup to avoid messing with existing work.")
+            println("❌  Branch '$branchName' already exists. Aborting setup to avoid messing with existing work.")
+            println("️⚠️  use:    gbd! $branchName")
+            println("️⚠️  to delete the branch | or adjust the setup command")
             return
         }
     } else {
-        println("⚠️ Not inside a git repository. Will skip git branch/commit steps.")
+        println("⚠️  Not inside a git repository. Will skip git branch/commit steps.")
     }
 
     println("Starting Advent of Code setup for $year Day $dayPadded...")
@@ -108,7 +111,7 @@ fun main(args: Array<String>) {
 
     // --- 6. Git automation: only if we're in a repo ---
     if (!isGitRepo()) {
-        println("⚠️ Not a git repo, skipping branch and commit.")
+        println("⚠️  Not a git repo, skipping branch and commit.")
         return
     }
 
@@ -146,7 +149,7 @@ fun main(args: Array<String>) {
     if (commitExit == 0) {
         println("✨ Setup complete. Commit created successfully.")
     } else {
-        println("⚠️ git commit failed (maybe no changes). Check 'git status' and commit manually if needed.")
+        println("⚠️  git commit failed (maybe no changes). Check 'git status' and commit manually if needed.")
     }
 
     runCommand("open", "https://adventofcode.com/$year/day/$dayUnpadded")
