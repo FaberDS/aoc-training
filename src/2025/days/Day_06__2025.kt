@@ -2,38 +2,17 @@
  * Advent of code (2025) solution for day 6 by Denis Schüle.
  * [Advent of code 2025-6 ](https://adventofcode.com/2025/day/6)
  **/
-import MathOperation
 import aoc.handleSubmit
 import datastructures.ConfigForDay
-import datastructures.NumbersAlphabetic
+import datastructures.MathOperation
+import datastructures.MathOperations
 import extensions.printSeparated
+import extensions.toDebugString
 import utils.readInput
 import utils.rotate90
-import utils.splitIntoCharGrid
 import utils.splitIntoStringGrid
 import kotlin.collections.toMutableList
-import kotlin.plus
 import kotlin.time.measureTimedValue
-
-enum class MathOperation(val sign: Char) {
-    ADD('+'),
-    MULTIPLY('*');
-
-    public fun performCalculation(acc: Long,next:Long):Long = when(this) {
-        ADD -> acc + next
-        MULTIPLY -> acc * next
-    }
-
-    companion object {
-        fun fromChar(raw: Char): MathOperation? {
-            return MathOperation.entries.firstOrNull { it.sign == raw }
-        }
-    }
-}
-
-data class MathOperations(val from: Int, val to: Int, val operation: MathOperation){
-    fun length():Int = to - from
-}
 
 /**
  * PART-1
@@ -93,14 +72,15 @@ fun main() {
          solution2 = 0
      )
 
-    fun handleOperation(numbers: MutableList<String>): Long{
+    fun handleOperationPart1(numbers: MutableList<String>): Long{
         val operator: MathOperation = MathOperation.fromChar(numbers.removeFirst() .first())!!
         return numbers.map{it.toLong()}.reduce { acc,next -> operator.performCalculation(acc,next) }
     }
 
     fun part1(input: List<String>): Long {
-        return rotate90(splitIntoStringGrid(input)).map{it.toMutableList()}.sumOf { handleOperation(it) }
+        return rotate90(splitIntoStringGrid(input)).map{it.toMutableList()}.sumOf { handleOperationPart1(it) }
     }
+    
     fun extractMathOperationDetails(row: String): Set<MathOperations> {
         var currentOperator = MathOperation.fromChar(row[0])!!
         var startIndex = 0
@@ -111,14 +91,14 @@ fun main() {
             val nextOperator = MathOperation.fromChar(operator)
             if(nextOperator != null) {
                 val end = i - 2
-                operations.add(MathOperations(startIndex,end,currentOperator))
+                operations.add(MathOperations(startIndex, end, currentOperator))
                 currentOperator = nextOperator
                 startIndex = i
             }
         }
         // complete last operation
         val end = row.length + 1
-        operations.add(MathOperations(startIndex,end,currentOperator))
+        operations.add(MathOperations(startIndex, end, currentOperator))
         return operations
     }
 
@@ -127,22 +107,21 @@ fun main() {
         val grid: List<CharArray> = input.dropLast(1).map { row ->
             row.toCharArray()
         }
-        return operations.sumOf { op ->
+        val result =  operations.sumOf { op ->
             val digits = mutableListOf<Long>()
             for(x in op.from..op.to){
                 var digitString = ""
                 for(rows in grid) {
                     val value = rows.get(x)
                     if(value.isDigit()) {
-//                        println("x: $x digitString: $digitString | value: $value")
                         digitString += value.toString()
                     }
                 }
                 digits.add(digitString.toLong())
             }
-            val r: Long = digits.reduce{acc, next -> op.operation.performCalculation(acc.toLong(),next.toLong())}
-            r
+            digits.reduce{acc, next -> op.operation.performCalculation(acc.toLong(),next.toLong())}
         }
+        return result
     }
 
     try {

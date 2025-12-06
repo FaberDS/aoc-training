@@ -8,3 +8,6 @@ fun<T> List<T>.middleValue(): T {
         return  this.get(n / 2)
     }
 }
+
+fun List<CharArray>.toDebugString(): String =
+    this.joinToString("\n") { it.concatToString() }
