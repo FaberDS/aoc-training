@@ -7,6 +7,13 @@ import utils.readInput
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/**
+ *   PART-1
+ *
+ *   PART-2
+ *
+*/
+
 object Day@@DAY_NUM_PADDED@@ : AoCDay<Int>(
     year = @@AOC_YEAR@@,
     day = @@DAY_NUM@@,
@@ -17,14 +24,16 @@ object Day@@DAY_NUM_PADDED@@ : AoCDay<Int>(
     answer2Expected = null,
 ) {
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): Long {
         // TODO
-        return 0
+        var result = 0L
+        return result
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Long {
         // TODO
-        return 0
+        var result = 0L
+        return result
     }
 }
 
@@ -52,22 +61,22 @@ class Day@@DAY_NUM_PADDED@@Test {
     @Test
     fun example_part1() {
         // replace ??? when you know the expected value
-        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part1(exampleInput1))
+        assertEquals(0L , Day@@DAY_NUM_PADDED@@.part1(exampleInput1))
     }
 
     @Test
     fun example_part2() {
-        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part2(exampleInput2))
+        assertEquals(0L , Day@@DAY_NUM_PADDED@@.part2(exampleInput2))
     }
 
     @Test
     fun real_part1() {
         // once you solved it the first time, paste the answer here
-        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part1(realInput))
+        assertEquals(0L , Day@@DAY_NUM_PADDED@@.part1(realInput))
     }
 
     @Test
     fun real_part2() {
-        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part2(realInput))
+        assertEquals(0L , Day@@DAY_NUM_PADDED@@.part2(realInput))
     }
 }
