@@ -15,18 +15,33 @@ dependencies {
 
 
 tasks.register<JavaExec>("fetchInput") {
-    mainClass.set("aoc.Fetch_inputKt")
+    // calls aoc.FetchInputKt.main
+    mainClass.set("aoc.FetchInputKt")
 
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 
     val dayArg = project.properties["day"] as? String
     val yearArg = project.properties["year"] as? String
-
-    args(listOf(dayArg, yearArg).filterNotNull())
+    args(listOfNotNull(dayArg, yearArg))
 
     workingDir = project.rootDir
 }
+
+tasks.register<JavaExec>("createDayFiles") {
+    // calls aoc.CreateDayFilesKt.main
+    mainClass.set("aoc.CreateDayFilesKt")
+
+    classpath = sourceSets["main"].runtimeClasspath
+    standardInput = System.`in`
+
+    val dayArg = project.properties["day"] as? String
+    val yearArg = project.properties["year"] as? String
+    args(listOfNotNull(dayArg, yearArg))
+
+    workingDir = project.rootDir
+}
+
 tasks {
     wrapper {
         gradleVersion = "8.11.1"

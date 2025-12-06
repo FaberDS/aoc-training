@@ -1,0 +1,35 @@
+import utils.readInput
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+class Day@@DAY_NUM_PADDED@@Test {
+
+    // adjust paths if your demo filenames differ
+    private val exampleInput1 = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+    private val exampleInput2 = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+    private val realInput     = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+
+    @Test
+    fun example_part1() {
+        // TODO
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part1(exampleInput1))
+    }
+
+    @Test
+    fun example_part2() {
+        // TODO
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part2(exampleInput2))
+    }
+
+    @Test
+    fun real_part1() {
+        // TODO
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part1(realInput))
+    }
+
+    @Test
+    fun real_part2() {
+        // TODO
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part2(realInput))
+    }
+}
