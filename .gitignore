@@ -5,3 +5,5 @@ build
 src/**/*.txt
 local.properties
 **/**/.env
+/gradle.properties
+/cron_setupDay_test.log
