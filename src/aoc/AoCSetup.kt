@@ -86,22 +86,21 @@ fun fetchInputAndSave(day: Int, year: Int, sessionCookieValue: String): Boolean 
 /**
  * Creates:
  *  - solution file: src/<year>/days/Day_XX__<year>.kt
- *  - test file:     src/test/kotlin<year>/Day_XX__<year>_Test.kt
- *  - input:         src/<year>/input/day_XX.txt
- *  - demo input:    src/<year>/input/day_XX_demo.txt
+ *  - test file:     src/test/kotlin/<year>/Day_XX__<year>_Test.kt
+ *  - demo inputs:   src/<year>/input/day_XX_demo.txt, day_XX_2_demo.txt
  */
 fun createKotlinFiles(day: Int, year: Int) {
-    val dayPadded = "%02d".format(day)
+    val dayPadded = AoCPaths.dayPadded(day)
     val dayNum = day.toString()
 
-    val daysDir = File("src/$year/days")
-    val inputDir = File("src/$year/input")
-    val testDir = File("src/test/kotlin/$year")
+    val daysDir = AoCPaths.daysDir(year)
+    val inputDir = AoCPaths.inputDir(year)
+    val testDir = AoCPaths.testsDir(year)
 
-    val solutionFile = File(daysDir, "Day_${dayPadded}__$year.kt")
-    val testFile = File(testDir, "Day_${dayPadded}__${year}_Test.kt")
-    val demoFile = File(inputDir, "day_${dayPadded}_demo.txt")
-    val demo2File = File(inputDir, "day_${dayPadded}_2_demo.txt")
+    val solutionFile = AoCPaths.solutionFile(year, day)
+    val testFile = AoCPaths.testFile(year, day)
+    val demoFile = AoCPaths.demo1File(year, day)
+    val demo2File = AoCPaths.demo2File(year, day)
 
     // --- solution file ---
     if (solutionFile.exists()) {
@@ -135,7 +134,7 @@ fun createKotlinFiles(day: Int, year: Int) {
         println("📝 Created test file: ${testFile.path}")
     }
 
-    // --- demo input ---
+    // --- demo inputs ---
     if (!demoFile.exists()) {
         inputDir.mkdirs()
         demoFile.writeText("# Add your demo input here\n")
@@ -143,8 +142,8 @@ fun createKotlinFiles(day: Int, year: Int) {
     }
     if (!demo2File.exists()) {
         inputDir.mkdirs()
-        demo2File.writeText("# Add your demo input here\n")
-        println("📝 Created demo input file: ${demo2File.path}")
+        demo2File.writeText("# Add your second demo input here\n")
+        println("📝 Created second demo input file: ${demo2File.path}")
     }
 }
 

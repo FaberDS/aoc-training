@@ -1,7 +1,6 @@
 package aoc
 
 import java.io.File
-import java.lang.ProcessBuilder.Redirect.to
 import java.time.LocalDate
 
 private fun runCommand(vararg cmd: String): Int {
@@ -18,15 +17,12 @@ private fun runCommandCapture(vararg cmd: String): String {
     return process.inputStream.bufferedReader().readText()
 }
 
-/** Are we inside a git repo at all? */
 private fun isGitRepo(): Boolean =
     runCommand("git", "rev-parse", "--is-inside-work-tree") == 0
 
-/** Is the working tree clean (no uncommitted changes)? */
 private fun isWorkingTreeClean(): Boolean =
     runCommandCapture("git", "status", "--porcelain").isBlank()
 
-/** Does the given branch already exist? */
 private fun branchExists(name: String): Boolean =
     runCommand("git", "rev-parse", "--verify", "--quiet", name) == 0
 
@@ -40,8 +36,8 @@ fun main(args: Array<String>) {
     val (dayUnpadded, year) = if (args.isEmpty()) {
         if (currentMonth == 12) {
             val day = currentDay
-            val dayPadded = "%02d".format(day)
-            val todayFile = File("src/$currentYear/days/Day_${dayPadded}__${currentYear}.kt")
+            val dayPadded = AoCPaths.dayPadded(day)
+            val todayFile = AoCPaths.solutionFile(currentYear, day)
 
             if (todayFile.exists()) {
                 println("Setup already exists for YEAR=$currentYear, DAY=$dayPadded:")
@@ -62,7 +58,7 @@ fun main(args: Array<String>) {
         day to yearValue
     }
 
-    val dayPadded = "%02d".format(dayUnpadded)
+    val dayPadded = AoCPaths.dayPadded(dayUnpadded)
     val branchName = "aoc/$year/$dayPadded"
 
     // --- 2. Git safety checks BEFORE touching any files ---
@@ -85,9 +81,9 @@ fun main(args: Array<String>) {
     println("Starting Advent of Code setup for $year Day $dayPadded...")
 
     // --- 3. Ensure directories exist ---
-    val yearInputDir = File("src/$year/input")
-    val yearDaysDir  = File("src/$year/days")
-    val yearTestDir  = File("src/test/kotlin/$year")
+    val yearInputDir = AoCPaths.inputDir(year)
+    val yearDaysDir  = AoCPaths.daysDir(year)
+    val yearTestDir  = AoCPaths.testsDir(year)
 
     println("-> Ensuring directories exist: ${yearInputDir.path}, ${yearDaysDir.path}, ${yearTestDir.path}")
     yearInputDir.mkdirs()
@@ -126,11 +122,11 @@ fun main(args: Array<String>) {
     runCommand("git", "config", "user.email", "github-actions[bot]@users.noreply.github.com")
     runCommand("git", "config", "user.name", "GitHub Actions Bot")
 
-    val solutionFilePath = "src/$year/days/Day_${dayPadded}__${year}.kt"
-    val inputFilePath    = "src/$year/input/day_${dayPadded}.txt"
-    val demoInputPath    = "src/$year/input/day_${dayPadded}_demo.txt"
-    val demoInput2Path    = "src/$year/input/day_${dayPadded}_2_demo.txt"
-    val testFilePath     = "src/test/kotlin/$year/Day_${dayPadded}__${year}_Test.kt"
+    val solutionFilePath = AoCPaths.solutionFile(year, dayUnpadded).path
+    val inputFilePath    = AoCPaths.realInputFile(year, dayUnpadded).path
+    val demoInputPath    = AoCPaths.demo1File(year, dayUnpadded).path
+    val demoInput2Path   = AoCPaths.demo2File(year, dayUnpadded).path
+    val testFilePath     = AoCPaths.testFile(year, dayUnpadded).path
 
     println("-> Adding new files to Git staging area...")
     runCommand("git", "add", solutionFilePath)
@@ -138,9 +134,9 @@ fun main(args: Array<String>) {
     runCommand("git", "add", "-f", demoInputPath)
     runCommand("git", "add", "-f", demoInput2Path)
     runCommand("git", "add", testFilePath)
-    runCommand("git", "add", "src/$year/days")
-    runCommand("git", "add", "src/$year/input")
-    runCommand("git", "add", "src/test/$year")
+    runCommand("git", "add", AoCPaths.daysDir(year).path)
+    runCommand("git", "add", AoCPaths.inputDir(year).path)
+    runCommand("git", "add", AoCPaths.testsDir(year).path)
 
     val commitMessage = "aoc-$year-$dayPadded: setup"
     println("-> Creating commit: '$commitMessage'")
@@ -152,6 +148,5 @@ fun main(args: Array<String>) {
         println("⚠️  git commit failed (maybe no changes). Check 'git status' and commit manually if needed.")
     }
 
-    runCommand("open", "https://adventofcode.com/$year/day/$dayUnpadded")
-
+    runCommand("open", AoCPaths.aocUrl(year, dayUnpadded))
 }
