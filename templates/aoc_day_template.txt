@@ -1,0 +1,73 @@
+/**
+ * Advent of code (@@AOC_YEAR@@) solution for day @@DAY_NUM@@ by Denis Schüle.
+ * https://adventofcode.com/@@AOC_YEAR@@/day/@@DAY_NUM@@
+ */
+import aoc.AoCDay
+import utils.readInput
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+object Day@@DAY_NUM_PADDED@@ : AoCDay<Int>(
+    year = @@AOC_YEAR@@,
+    day = @@DAY_NUM@@,
+    // fill these once you know them:
+    example1Expected = null,
+    example2Expected = null,
+    answer1Expected = null,
+    answer2Expected = null,
+) {
+
+    override fun part1(input: List<String>): Int {
+        // TODO
+        return 0
+    }
+
+    override fun part2(input: List<String>): Int {
+        // TODO
+        return 0
+    }
+}
+
+// -------- manual runner --------
+
+fun main() =
+    Day@@DAY_NUM_PADDED@@.run(
+        runExamples = true,
+        runReal = true,
+        runPart1 = true,
+        runPart2 = true,
+        submit1 = false,
+        submit2 = false,
+    )
+
+// -------- tests (4 “standard” ones) --------
+
+class Day@@DAY_NUM_PADDED@@Test {
+
+    // adjust paths if your demo filenames differ
+    private val exampleInput1 = readInput("day_@@DAY_NUM_PADDED@@_demo", "@@AOC_YEAR@@")
+    private val exampleInput2 = readInput("day_@@DAY_NUM_PADDED@@_02_demo", "@@AOC_YEAR@@")
+    private val realInput     = readInput("day_@@DAY_NUM_PADDED@@", "@@AOC_YEAR@@")
+
+    @Test
+    fun example_part1() {
+        // replace ??? when you know the expected value
+        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part1(exampleInput1))
+    }
+
+    @Test
+    fun example_part2() {
+        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part2(exampleInput2))
+    }
+
+    @Test
+    fun real_part1() {
+        // once you solved it the first time, paste the answer here
+        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part1(realInput))
+    }
+
+    @Test
+    fun real_part2() {
+        assertEquals(??? , Day@@DAY_NUM_PADDED@@.part2(realInput))
+    }
+}
