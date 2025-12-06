@@ -41,9 +41,9 @@ object Day@@DAY_NUM_PADDED@@ : AoCDay<Long>(
 fun main() =
     Day@@DAY_NUM_PADDED@@.run(
         runExamples = true,
-        runReal = true,
+        runReal = false,
         runPart1 = true,
-        runPart2 = true,
+        runPart2 = false,
         submit1 = false,
         submit2 = false,
     )

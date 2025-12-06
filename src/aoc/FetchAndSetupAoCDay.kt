@@ -146,4 +146,7 @@ fun main(args: Array<String>) {
     } else {
         println("⚠️ git commit failed (maybe no changes). Check 'git status' and commit manually if needed.")
     }
+
+    runCommand("open", "https://adventofcode.com/$year/day/$dayUnpadded")
+
 }
