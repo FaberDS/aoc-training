@@ -2,8 +2,8 @@
  * Advent of code (2025) solution for day 1 by Denis Schüle.
  * [Advent of code 2025-1 ](https://adventofcode.com/2025/day/1)
  **/
+import Setup.ConfigForDay
 import aoc.handleSubmit
-import datastructures.ConfigForDay
 import datastructures.Rotation
 import datastructures.RotationDirection
 import datastructures.extractInstructions
@@ -30,10 +30,10 @@ fun main() {
          execute2 = true,
          execute1demo = true,
          execute2demo = true,
-         exampleSolution1 = 3,
-         exampleSolution2 = 6,
-         solution1 = 1092,
-         solution2 = 6616
+         exampleSolution1 = "3",
+         exampleSolution2 = "6",
+         solution1 = "1092",
+         solution2 = "6616"
      ) //wrong: 2624, 4936,7708
 
     fun rotate(rotation: Rotation, position: Int): Pair<Int, Int> {
@@ -75,17 +75,17 @@ fun main() {
         }.result
     }
 
-    fun part1(input: List<String>): Int {
+    fun part1(input: List<String>): String {
         val instructions = input
             .mapNotNull(::extractInstructions)
-        val result = applyInstructions(instructions, mode = CountMode.END_ONLY)
+        val result = applyInstructions(instructions, mode = CountMode.END_ONLY).toString()
         return result
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>): String {
         val instructions = input
             .mapNotNull(::extractInstructions)
-        val result = applyInstructions(instructions, mode = CountMode.EVERY_CLICK_ZERO)
+        val result = applyInstructions(instructions, mode = CountMode.EVERY_CLICK_ZERO).toString()
         return result
     }
 
@@ -118,7 +118,7 @@ fun main() {
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
             if(config.check1) check(part1Solution == config.solution1)
-            if(config.submit1) handleSubmit(2025,1,1,part1Solution.toString())
+            if(config.submit1) handleSubmit(2025,1,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -129,7 +129,7 @@ fun main() {
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
             if (config.check2) check(part2Solution == config.solution2)
-            if (config.submit2) handleSubmit(2025, 1, 2, part2Solution.toString())
+            if (config.submit2) handleSubmit(2025, 1, 2, part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()

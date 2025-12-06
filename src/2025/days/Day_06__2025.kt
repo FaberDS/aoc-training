@@ -2,12 +2,11 @@
  * Advent of code (2025) solution for day 6 by Denis Schüle.
  * [Advent of code 2025-6 ](https://adventofcode.com/2025/day/6)
  **/
+import Setup.ConfigForDay
 import aoc.handleSubmit
-import datastructures.ConfigForDay
 import datastructures.MathOperation
 import datastructures.MathOperations
 import extensions.printSeparated
-import extensions.toDebugString
 import utils.readInput
 import utils.rotate90
 import utils.splitIntoStringGrid
@@ -66,10 +65,10 @@ fun main() {
          execute2 = true,
          execute1demo = true,
          execute2demo = true,
-         exampleSolution1 = 4277556,
-         exampleSolution2 = 3263827,
-         solution1 = 0,
-         solution2 = 0
+         exampleSolution1 = "4277556",
+         exampleSolution2 = "3263827",
+         solution1 = "4076006202939",
+         solution2 = "7903168391557"
      )
 
     fun handleOperationPart1(numbers: MutableList<String>): Long{
@@ -77,8 +76,8 @@ fun main() {
         return numbers.map{it.toLong()}.reduce { acc,next -> operator.performCalculation(acc,next) }
     }
 
-    fun part1(input: List<String>): Long {
-        return rotate90(splitIntoStringGrid(input)).map{it.toMutableList()}.sumOf { handleOperationPart1(it) }
+    fun part1(input: List<String>): String {
+        return rotate90(splitIntoStringGrid(input)).map{it.toMutableList()}.sumOf { handleOperationPart1(it) }.toString()
     }
     
     fun extractMathOperationDetails(row: String): Set<MathOperations> {
@@ -102,7 +101,7 @@ fun main() {
         return operations
     }
 
-    fun part2(input: List<String>): Long {
+    fun part2(input: List<String>): String {
         val operations = extractMathOperationDetails(input.last())
         val grid: List<CharArray> = input.dropLast(1).map { row ->
             row.toCharArray()
@@ -121,7 +120,7 @@ fun main() {
             }
             digits.reduce{acc, next -> op.operation.performCalculation(acc.toLong(),next.toLong())}
         }
-        return result
+        return result.toString()
     }
 
     try {
@@ -132,14 +131,14 @@ fun main() {
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
-            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1.toLong())
+            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
         }
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2 as MutableList<String>)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2.toLong())
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
         }
 
         /* --- RUN FULL INPUT --- */
@@ -150,8 +149,8 @@ fun main() {
                part1(input)
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
-            if(config.check1) check(part1Solution == 4076006202939)
-            if(config.submit1) handleSubmit(2025,6,1,part1Solution.toString())
+            if(config.check1) check(part1Solution == config.solution1)
+            if(config.submit1) handleSubmit(2025,6,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -161,8 +160,8 @@ fun main() {
                 part2(input as MutableList<String>)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == 7903168391557)
-            if(config.submit2) handleSubmit(2025,6,2,part2Solution.toString())
+            if(config.check2) check(part2Solution == config.solution2)
+            if(config.submit2) handleSubmit(2025,6,2,part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()

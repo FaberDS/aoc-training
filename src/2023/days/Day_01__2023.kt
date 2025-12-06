@@ -2,8 +2,8 @@
  * Advent of code (2023) solution for day 1 by Denis Schüle.
  * [Advent of code 2023-1 ](https://adventofcode.com/2023/day/1)
  **/
+ import Setup.ConfigForDay
  import aoc.handleSubmit
- import datastructures.ConfigForDay
  import datastructures.getAlphabeticNumber
  import extensions.printSeparated
  import utils.getAlphaNumericRegex
@@ -23,10 +23,10 @@ fun main() {
         execute2 = true,
         execute1demo = true,
         execute2demo = true,
-        exampleSolution1 = 142,
-        exampleSolution2 = 281,
-        solution1 = 54634,
-        solution2 = 53855
+        exampleSolution1 = "142",
+        exampleSolution2 = "281",
+        solution1 = "54634",
+        solution2 = "53855"
     )
 
     fun extractNumbers(line: String, regex: Regex): Int {
@@ -42,14 +42,14 @@ fun main() {
         return digits.first() * 10 + digits.last()
     }
 
-    fun part1(input: List<String>): Int {
+    fun part1(input: List<String>): String {
         val regex= Regex("""(\d)""")
-        return input.sumOf { extractNumbers(it, regex) }
+        return input.sumOf { extractNumbers(it, regex) }.toString()
     }
 
-    fun part2(input: List<String>): Int {
+    fun part2(input: List<String>): String {
         val regex = getAlphaNumericRegex(true)
-        return input.sumOf { extractNumbers(it, regex) }
+        return input.sumOf { extractNumbers(it, regex) }.toString()
     }
 
     try {
