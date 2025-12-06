@@ -84,6 +84,14 @@ fun splitIntoCharGrid(input: List<String>): List<List<Char>> {
     }
     return grid
 }
+fun splitIntoStringGrid(input: List<String>): List<List<String>> {
+    val grid = mutableListOf<List<String>>()
+    for(line in input) {
+        val row = line.trim().split(Regex("""\s+""")).toMutableList()
+        grid.add(row)
+    }
+    return grid
+}
 
 /**
  * Finds coordinates for a given `Char` in a two-dimensional grid
@@ -104,4 +112,24 @@ fun getAlphaNumericRegex(overlapping: Boolean): Regex {
     val overlap = if (overlapping) "?=" else ""
     val words = numberWords.joinToString("|")
     return Regex("""($overlap($words|\d))""")
+}
+fun rotate90(grid: List<List<String>>): List<List<String>> {
+    val rows = grid.size
+    require(rows > 0) { "Grid must have at least one row" }
+    val cols = grid[0].size
+    require(grid.all { it.size == cols }) { "All rows must have the same length" }
+
+    // After 90° clockwise:
+    // new height  = old width  (cols)
+    // new width   = old height (rows)
+    val rotated = MutableList(cols) { MutableList(rows) { "" } }
+
+    for ((y, row) in grid.withIndex()) {
+        for ((x, value) in row.withIndex()) {
+            // (y, x) -> (x, rows - 1 - y)
+            rotated[x][rows - 1 - y] = value
+        }
+    }
+
+    return rotated
 }
