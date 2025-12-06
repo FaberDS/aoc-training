@@ -86,7 +86,8 @@ fun fetchInputAndSave(day: Int, year: Int, sessionCookieValue: String): Boolean 
 /**
  * Creates:
  *  - solution file: src/<year>/days/Day_XX__<year>.kt
- *  - test file:     src/test/<year>/<year>_XXTest.kt
+ *  - test file:     src/test/kotlin<year>/Day_XX__<year>_Test.kt
+ *  - input:         src/<year>/input/day_XX.txt
  *  - demo input:    src/<year>/input/day_XX_demo.txt
  */
 fun createKotlinFiles(day: Int, year: Int) {
@@ -95,7 +96,7 @@ fun createKotlinFiles(day: Int, year: Int) {
 
     val daysDir = File("src/$year/days")
     val inputDir = File("src/$year/input")
-    val testDir = File("src/test/$year")
+    val testDir = File("src/test/kotlin/$year")
 
     val solutionFile = File(daysDir, "Day_${dayPadded}__$year.kt")
     val testFile = File(testDir, "Day_${dayPadded}__${year}_Test.kt")
