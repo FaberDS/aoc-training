@@ -62,7 +62,7 @@ fun main() {
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
             if(config.check1) check(part1Solution == config.solution1)
-            if(config.submit1) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,1,part1Solution.toString())
+            if(config.submit1) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -73,7 +73,7 @@ fun main() {
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
             if(config.check2) check(part2Solution == config.solution2)
-            if(config.submit2) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,2,part2Solution.toString())
+            if(config.submit2) handleSubmit(@@AOC_YEAR@@,@@DAY_NUM@@,2,part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()

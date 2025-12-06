@@ -2,8 +2,8 @@
  * Advent of code (2025) solution for day 3 by Denis Schüle.
  * [Advent of code 2025-3 ](https://adventofcode.com/2025/day/3)
  **/
+import Setup.ConfigForDay
 import aoc.handleSubmit
-import datastructures.ConfigForDay
 import extensions.findMaxNumberWithNDigits
 import extensions.printSeparated
 import utils.readInput
@@ -61,23 +61,23 @@ fun main() {
         execute2 = true,
         execute1demo = true,
         execute2demo = true,
-        exampleSolution1 = 357,
-        exampleSolution2 = 0,
-        solution1 = 17193,
-        solution2 = 0
+        exampleSolution1 = "357",
+        exampleSolution2 = "3121910778619",
+        solution1 = "17193",
+        solution2 = "171297349921310"
     )
 
-    fun solveDay3(input: List<String>, n: Int): Long {
+    fun solveDay3(input: List<String>, n: Int): String {
         return input
             .sumOf{
                 val maxIndex = it.length -n +1
                 val maxDigit = it.findMaxNumberWithNDigits(n,maxIndex)
                 if (maxDigit.isBlank()) {
-                    return 0L
+                    return ""
                 } else {
                     maxDigit.toLong()
                 }
-            }
+            }.toString()
     }
     fun part1(input: List<String>) = solveDay3(input,2)
 
@@ -92,14 +92,14 @@ fun main() {
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
-            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1.toLong())
+            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
         }
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == 3121910778619)
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
         }
 
         /* --- RUN FULL INPUT --- */
@@ -110,8 +110,8 @@ fun main() {
                part1(input)
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
-            if(config.check1) check(part1Solution == config.solution1.toLong())
-            if(config.submit1) handleSubmit(2025,3,1,part1Solution.toString())
+            if(config.check1) check(part1Solution == config.solution1)
+            if(config.submit1) handleSubmit(2025,3,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -121,8 +121,8 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == 171297349921310)
-            if(config.submit2) handleSubmit(2025,3,2,part2Solution.toString())
+            if(config.check2) check(part2Solution == config.solution2)
+            if(config.submit2) handleSubmit(2025,3,2,part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()

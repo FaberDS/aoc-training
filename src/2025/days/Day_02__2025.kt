@@ -2,8 +2,8 @@
  * Advent of code (2025) solution for day 2 by Denis Schüle.
  * [Advent of code 2025-2 ](https://adventofcode.com/2025/day/2)
  **/
+import Setup.ConfigForDay
 import aoc.handleSubmit
-import datastructures.ConfigForDay
 import extensions.isInvalidId
 import extensions.printSeparated
 import extensions.splitInHalf
@@ -56,10 +56,10 @@ fun main() {
         execute2 = true,
         execute1demo = true,
         execute2demo = true,
-        exampleSolution1 = 1227775554,
-        exampleSolution2 = 0,
-        solution1 = 0,
-        solution2 = 0
+        exampleSolution1 = "1227775554",
+        exampleSolution2 = "4174379265",
+        solution1 = "38158151648",
+        solution2 = "45283684555"
     )
 
     fun parseRanges(lines: List<String>): MutableList<Pair<Long, Long>> {
@@ -103,7 +103,7 @@ fun main() {
         return invalidRanges
     }
 
-    fun part1(input: List<String>): Long {
+    fun part1(input: List<String>): String {
 //        utils.println("🙈MAX INT: ${Int.MAX_VALUE}")
         val ranges = parseRanges(input)
         var result: Long = 0
@@ -113,10 +113,10 @@ fun main() {
                 result += it
             }
         }
-        return result
+        return result.toString()
     }
 
-    fun part2(input: List<String>): Long {
+    fun part2(input: List<String>): String {
         val ranges = parseRanges(input)
         var result: Long = 0
         ranges.forEach {
@@ -125,7 +125,7 @@ fun main() {
                 result += it
             }
         }
-        return result
+        return result.toString()
     }
 
     try {
@@ -136,14 +136,14 @@ fun main() {
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
-            if(config.checkDemo1) check(part1DemoSolution == 1227775554.toLong())
+            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
         }
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == 4174379265)
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
         }
 
         /* --- RUN FULL INPUT --- */
@@ -154,8 +154,8 @@ fun main() {
                 part1(input)
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
-            if(config.check1) check(part1Solution== 38158151648)
-            if(config.submit1) handleSubmit(2025,2,1,part1Solution.toString())
+            if(config.check1) check(part1Solution== config.solution1)
+            if(config.submit1) handleSubmit(2025,2,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -165,8 +165,8 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == 45283684555.toLong())
-            if(config.submit2) handleSubmit(2025,2,2,part2Solution.toString())
+            if(config.check2) check(part2Solution == config.solution2)
+            if(config.submit2) handleSubmit(2025,2,2,part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()

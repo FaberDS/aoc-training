@@ -1,0 +1,47 @@
+import aoc.AoCPaths
+import utils.readInput
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+class Day@@DAY_NUM_PADDED@@Test {
+
+    // Example inputs and real input using AoCPaths for base names
+    private val exampleInput1 = readInput(
+        AoCPaths.demo1Base(@@DAY_NUM@@),
+        "@@AOC_YEAR@@",
+    )
+
+    private val exampleInput2 = readInput(
+        AoCPaths.demo2Base(@@DAY_NUM@@),
+        "@@AOC_YEAR@@",
+    )
+
+    private val realInput = readInput(
+        AoCPaths.realInputBase(@@DAY_NUM@@),
+        "@@AOC_YEAR@@",
+    )
+
+    @Test
+    fun example_part1() {
+        // TODO: adjust expected value once known
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part1(exampleInput1))
+    }
+
+    @Test
+    fun example_part2() {
+        // TODO: adjust expected value once known
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part2(exampleInput2))
+    }
+
+    @Test
+    fun real_part1() {
+        // TODO: adjust expected value once known
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part1(realInput))
+    }
+
+    @Test
+    fun real_part2() {
+        // TODO: adjust expected value once known
+        assertEquals(0L, Day@@DAY_NUM_PADDED@@.part2(realInput))
+    }
+}

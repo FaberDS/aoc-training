@@ -2,8 +2,8 @@
  * Advent of code (2025) solution for day 5 by Denis Schüle.
  * [Advent of code 2025-5 ](https://adventofcode.com/2025/day/5)
  **/
+import Setup.ConfigForDay
 import aoc.handleSubmit
-import datastructures.ConfigForDay
 import extensions.printSeparated
 import utils.readInput
 import kotlin.time.measureTimedValue
@@ -51,10 +51,10 @@ fun main() {
          execute2 = true,
          execute1demo = false,
          execute2demo = true,
-         exampleSolution1 = 3,
-         exampleSolution2 = 14,
-         solution1 = 756,
-         solution2 = 0
+         exampleSolution1 = "3",
+         exampleSolution2 = "14",
+         solution1 = "756",
+         solution2 = "355555479253787"
      )
 
     fun isIdValid(id: Long, validRanges: Set<Pair<Long,Long>> ): Boolean {
@@ -63,7 +63,7 @@ fun main() {
         }
         return false
     }
-    fun part1(lines: List<String>): Int {
+    fun part1(lines: List<String>): String {
         var validIds = 0
         val validRanges = mutableSetOf<Pair<Long,Long>>()
         var readRanges = true
@@ -81,10 +81,10 @@ fun main() {
                 validIds += if(isIdValid(id,validRanges)) 1 else 0
             }
         }
-        return validIds
+        return validIds.toString()
     }
 
-    fun part2(lines: List<String>): Long {
+    fun part2(lines: List<String>): String {
         var rootNode: RangeNode? = null
         for (line in lines) {
             if (line.isEmpty()) {
@@ -99,9 +99,9 @@ fun main() {
             }
         }
 //        utils.println(rootNode)
-//        rootNode?.printTree()
+        rootNode?.printTree()
         val validCount = rootNode?.sumValidIds()
-        return validCount ?: 0
+        return (validCount ?: 0).toString()
     }
 
     try {
@@ -119,7 +119,7 @@ fun main() {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2.toLong())
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
         }
 
         /* --- RUN FULL INPUT --- */
@@ -131,7 +131,7 @@ fun main() {
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
             if(config.check1) check(part1Solution == config.solution1)
-            if(config.submit1) handleSubmit(2025,5,1,part1Solution.toString())
+            if(config.submit1) handleSubmit(2025,5,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -141,8 +141,8 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == 355555479253787)
-            if(config.submit2) handleSubmit(2025,5,2,part2Solution.toString())
+            if(config.check2) check(part2Solution == config.solution2)
+            if(config.submit2) handleSubmit(2025,5,2,part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()

@@ -2,9 +2,9 @@
  * Advent of code (2025) solution for day 4 by Denis Schüle.
  * [Advent of code 2025-3 ](https://adventofcode.com/2025/day/4)
  **/
+import Setup.ConfigForDay
 import aoc.handleSubmit
 import datastructures.CharGridFromString
-import datastructures.ConfigForDay
 import datastructures.cellsWithLessThanNNeighbours
 import datastructures.removeRollsWithLessThanNNeighbours
 import extensions.printSeparated
@@ -66,16 +66,16 @@ fun main() {
         execute2 = true,
         execute1demo = true,
         execute2demo = true,
-        exampleSolution1 = 13,
-        exampleSolution2 = 43,
-        solution1 = 1478,
-        solution2 = 9120
+        exampleSolution1 = "13",
+        exampleSolution2 = "43",
+        solution1 = "1478",
+        solution2 = "9120"
     )
 
 
-    fun part1(lines: List<String>): Long = CharGridFromString(lines).cellsWithLessThanNNeighbours(4).toLong()
+    fun part1(lines: List<String>) = CharGridFromString(lines).cellsWithLessThanNNeighbours(4).toString()
 
-    fun part2(lines: List<String>): Long = CharGridFromString(lines).removeRollsWithLessThanNNeighbours(4).toLong()
+    fun part2(lines: List<String>) = CharGridFromString(lines).removeRollsWithLessThanNNeighbours(4).toString()
 
     try {
         val exampleInput2 = readInput("day_04_demo", "2025")
@@ -85,14 +85,14 @@ fun main() {
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
-            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1.toLong())
+            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
         }
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == 43L)
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
         }
 
         /* --- RUN FULL INPUT --- */
@@ -103,8 +103,8 @@ fun main() {
                part1(input)
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
-            if(config.check1) check(part1Solution == config.solution1.toLong())
-            if(config.submit1) handleSubmit(2025,4,1,part1Solution.toString())
+            if(config.check1) check(part1Solution == config.solution1)
+            if(config.submit1) handleSubmit(2025,4,1,part1Solution)
         }
 
         if(config.execute2) {
@@ -114,8 +114,8 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == 9120L)
-            if(config.submit2) handleSubmit(2025,4,2,part2Solution.toString())
+            if(config.check2) check(part2Solution == config.solution2)
+            if(config.submit2) handleSubmit(2025,4,2,part2Solution)
         }
     } catch (t: Throwable) {
         t.printStackTrace()
