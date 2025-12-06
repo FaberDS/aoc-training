@@ -2,75 +2,147 @@
  * Advent of code (2025) solution for day 6 by Denis Schüle.
  * [Advent of code 2025-6 ](https://adventofcode.com/2025/day/6)
  **/
+import MathOperation
 import aoc.handleSubmit
 import datastructures.ConfigForDay
+import datastructures.NumbersAlphabetic
 import extensions.printSeparated
 import utils.readInput
 import utils.rotate90
 import utils.splitIntoCharGrid
 import utils.splitIntoStringGrid
 import kotlin.collections.toMutableList
+import kotlin.plus
 import kotlin.time.measureTimedValue
 
+enum class MathOperation(val sign: Char) {
+    ADD('+'),
+    MULTIPLY('*');
+
+    public fun performCalculation(acc: Long,next:Long):Long = when(this) {
+        ADD -> acc + next
+        MULTIPLY -> acc * next
+    }
+
+    companion object {
+        fun fromChar(raw: Char): MathOperation? {
+            return MathOperation.entries.firstOrNull { it.sign == raw }
+        }
+    }
+}
+
+data class MathOperations(val from: Int, val to: Int, val operation: MathOperation){
+    fun length():Int = to - from
+}
+
+/**
+ * PART-1
+ * Cephalopod math doesn't look that different from normal math. The math worksheet (your puzzle input) consists of a list of problems; each problem has a group of numbers that need to be either added (+) or multiplied (*) together.
+ *
+ * However, the problems are arranged a little strangely; they seem to be presented next to each other in a very long horizontal list. For example:
+ *
+ * 123 328  51 64
+ *  45 64  387 23
+ *   6 98  215 314
+ * *   +   *   +
+ * Each problem's numbers are arranged vertically; at the bottom of the problem is the symbol for the operation that needs to be performed. Problems are separated by a full column of only spaces. The left/right alignment of numbers within each problem can be ignored.
+ *
+ * So, this worksheet contains four problems:
+ *
+ * 123 * 45 * 6 = 33210
+ * 328 + 64 + 98 = 490
+ * 51 * 387 * 215 = 4243455
+ * 64 + 23 + 314 = 401
+ * To check their work, cephalopod students are given the grand total of adding together all of the answers to the individual problems. In this worksheet, the grand total is 33210 + 490 + 4243455 + 401 = 4277556.
+ *
+ * Of course, the actual worksheet is much wider. You'll need to make sure to unroll it completely so that you can read the problems clearly.
+ *
+ * Solve the problems on the math worksheet. What is the grand total found by adding together all of the answers to the individual problems?
+ *
+ *
+ * PART-2
+ * 123 328  51 64
+ *  45 64  387 23
+ *   6 98  215 314
+ * *   +   *   +
+ * Reading the problems right-to-left one column at a time, the problems are now quite different:
+ *
+ * The rightmost problem is 4 + 431 + 623 = 1058
+ * The second problem from the right is 175 * 581 * 32 = 3253600
+ * The third problem from the right is 8 + 248 + 369 = 625
+ * Finally, the leftmost problem is 356 * 24 * 1 = 8544
+ * Now, the grand total is 1058 + 3253600 + 625 + 8544 = 3263827.
+ */
 
 fun main() {
 
      val config = ConfigForDay(
-         submit1 = true,
+         submit1 = false,
          submit2 = false,
-         check1 = false,
-         check2 = false,
-         checkDemo1 = false,
-         checkDemo2 = false,
-         execute1 = false,
-         execute2 = false,
-         execute1demo = false,
+         check1 = true,
+         check2 = true,
+         checkDemo1 = true,
+         checkDemo2 = true,
+         execute1 = true,
+         execute2 = true,
+         execute1demo = true,
          execute2demo = true,
          exampleSolution1 = 4277556,
-         exampleSolution2 = 0,
+         exampleSolution2 = 3263827,
          solution1 = 0,
          solution2 = 0
      )
 
-    fun handleOperation(numbers: List<String>): Long{
-        var result = 1L
-        val operator: Char = numbers.get(0).get(0)
-        for((i,number) in numbers.withIndex()) {
-            if(i==0) continue
-            val n = number.toLong()
-            if(operator == '+'){
-                result += n
-            } else if (operator == '*'){
-
-                result *= n
-            }
-            println("numbers: $numbers, operator: $operator | n: $n = result: $result")
-        }
-        if(operator == '+') {
-            result -= 1
-        }
-        return result
+    fun handleOperation(numbers: MutableList<String>): Long{
+        val operator: MathOperation = MathOperation.fromChar(numbers.removeFirst() .first())!!
+        return numbers.map{it.toLong()}.reduce { acc,next -> operator.performCalculation(acc,next) }
     }
+
     fun part1(input: List<String>): Long {
-        var result = 0L
-        val gridInit = splitIntoStringGrid(input)
-        val grid = rotate90(gridInit)
-        println(grid)
-        for((y,row) in grid.withIndex()) {
-
-            result += handleOperation(row)
-            println("row: $row | result: $result")
-//            for((x, col)in row.withIndex()) {
-//                println("y: $y, x: $x row: $row | c: $col")
-//            }
-        }
-        return result
+        return rotate90(splitIntoStringGrid(input)).map{it.toMutableList()}.sumOf { handleOperation(it) }
     }
-
+    fun extractMathOperationDetails(row: String): Set<MathOperations> {
+        var currentOperator = MathOperation.fromChar(row[0])!!
+        var startIndex = 0
+        val operations = mutableSetOf<MathOperations>()
+        for((i,operator) in row.withIndex()){
+            if(i==0) continue
+            if(operator.isWhitespace()) continue
+            val nextOperator = MathOperation.fromChar(operator)
+            if(nextOperator != null) {
+                val end = i - 2
+                operations.add(MathOperations(startIndex,end,currentOperator))
+                currentOperator = nextOperator
+                startIndex = i
+            }
+        }
+        // complete last operation
+        val end = row.length + 1
+        operations.add(MathOperations(startIndex,end,currentOperator))
+        return operations
+    }
 
     fun part2(input: List<String>): Long {
-        var result = 0L
-        return result
+        val operations = extractMathOperationDetails(input.last())
+        val grid: List<CharArray> = input.dropLast(1).map { row ->
+            row.toCharArray()
+        }
+        return operations.sumOf { op ->
+            val digits = mutableListOf<Long>()
+            for(x in op.from..op.to){
+                var digitString = ""
+                for(rows in grid) {
+                    val value = rows.get(x)
+                    if(value.isDigit()) {
+//                        println("x: $x digitString: $digitString | value: $value")
+                        digitString += value.toString()
+                    }
+                }
+                digits.add(digitString.toLong())
+            }
+            val r: Long = digits.reduce{acc, next -> op.operation.performCalculation(acc.toLong(),next.toLong())}
+            r
+        }
     }
 
     try {
@@ -86,7 +158,7 @@ fun main() {
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
-            val part2DemoSolution = part2(exampleInput2)
+            val part2DemoSolution = part2(exampleInput2 as MutableList<String>)
             println("- Part 2 Demo: $part2DemoSolution")
             if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2.toLong())
         }
@@ -107,10 +179,10 @@ fun main() {
             "Part 2".printSeparated()
             val (part2Solution, timeTakenPart2) = measureTimedValue {
                 val input = readInput("day_06", "2025")
-                part2(input)
+                part2(input as MutableList<String>)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == config.solution2.toLong())
+            if(config.check2) check(part2Solution == 7903168391557)
             if(config.submit2) handleSubmit(2025,6,2,part2Solution.toString())
         }
     } catch (t: Throwable) {
