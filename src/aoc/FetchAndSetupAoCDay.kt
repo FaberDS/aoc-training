@@ -84,7 +84,7 @@ fun main(args: Array<String>) {
     // --- 3. Ensure directories exist ---
     val yearInputDir = File("src/$year/input")
     val yearDaysDir  = File("src/$year/days")
-    val yearTestDir  = File("src/test/$year")
+    val yearTestDir  = File("src/test/kotlin/$year")
 
     println("-> Ensuring directories exist: ${yearInputDir.path}, ${yearDaysDir.path}, ${yearTestDir.path}")
     yearInputDir.mkdirs()
