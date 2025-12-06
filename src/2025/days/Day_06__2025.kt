@@ -3,35 +3,73 @@
  * [Advent of code 2025-6 ](https://adventofcode.com/2025/day/6)
  **/
 import aoc.handleSubmit
+import datastructures.ConfigForDay
 import extensions.printSeparated
+import utils.readInput
+import utils.rotate90
+import utils.splitIntoCharGrid
+import utils.splitIntoStringGrid
+import kotlin.collections.toMutableList
 import kotlin.time.measureTimedValue
 
 
 fun main() {
 
      val config = ConfigForDay(
-             submit1 = false,
-             submit2 = false,
-             check1 = false,
-             check2 = false,
-             checkDemo1 = false,
-             checkDemo2 = false,
-             execute1 = false,
-             execute2 = false,
-             execute1demo = true,
-             execute2demo = false,
-             exampleSolution1 = 0,
-             exampleSolution2 = 0,
-             solution1 = 0,
-             solution2 = 0)
+         submit1 = true,
+         submit2 = false,
+         check1 = false,
+         check2 = false,
+         checkDemo1 = false,
+         checkDemo2 = false,
+         execute1 = false,
+         execute2 = false,
+         execute1demo = false,
+         execute2demo = true,
+         exampleSolution1 = 4277556,
+         exampleSolution2 = 0,
+         solution1 = 0,
+         solution2 = 0
+     )
 
-    fun part1(input: List<String>): Int {
-        var result = 0
+    fun handleOperation(numbers: List<String>): Long{
+        var result = 1L
+        val operator: Char = numbers.get(0).get(0)
+        for((i,number) in numbers.withIndex()) {
+            if(i==0) continue
+            val n = number.toLong()
+            if(operator == '+'){
+                result += n
+            } else if (operator == '*'){
+
+                result *= n
+            }
+            println("numbers: $numbers, operator: $operator | n: $n = result: $result")
+        }
+        if(operator == '+') {
+            result -= 1
+        }
+        return result
+    }
+    fun part1(input: List<String>): Long {
+        var result = 0L
+        val gridInit = splitIntoStringGrid(input)
+        val grid = rotate90(gridInit)
+        println(grid)
+        for((y,row) in grid.withIndex()) {
+
+            result += handleOperation(row)
+            println("row: $row | result: $result")
+//            for((x, col)in row.withIndex()) {
+//                println("y: $y, x: $x row: $row | c: $col")
+//            }
+        }
         return result
     }
 
-    fun part2(input: List<String>): Int {
-        var result = 0
+
+    fun part2(input: List<String>): Long {
+        var result = 0L
         return result
     }
 
@@ -43,14 +81,14 @@ fun main() {
             val part1DemoSolution = part1(exampleInput1)
             "Part 1 Demo".printSeparated()
             println("- Part 1 Demo: $part1DemoSolution")
-            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1)
+            if(config.checkDemo1) check(part1DemoSolution == config.exampleSolution1.toLong())
         }
 
         if(config.execute2demo) {
             "Part 2 Demo".printSeparated()
             val part2DemoSolution = part2(exampleInput2)
             println("- Part 2 Demo: $part2DemoSolution")
-            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2)
+            if(config.checkDemo2) check(part2DemoSolution == config.exampleSolution2.toLong())
         }
 
         /* --- RUN FULL INPUT --- */
@@ -61,7 +99,7 @@ fun main() {
                part1(input)
             }
             println("- Part 1: $part1Solution in $timeTakenPart1")
-            if(config.check1) check(part1Solution == config.solution1)
+            if(config.check1) check(part1Solution == 4076006202939)
             if(config.submit1) handleSubmit(2025,6,1,part1Solution.toString())
         }
 
@@ -72,7 +110,7 @@ fun main() {
                 part2(input)
             }
             println("- Part 2: $part2Solution in $timeTakenPart2")
-            if(config.check2) check(part2Solution == config.solution2)
+            if(config.check2) check(part2Solution == config.solution2.toLong())
             if(config.submit2) handleSubmit(2025,6,2,part2Solution.toString())
         }
     } catch (t: Throwable) {
