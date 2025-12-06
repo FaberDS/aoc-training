@@ -8,6 +8,10 @@ sourceSets {
     }
 }
 
+dependencies {
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("test"))
+}
 
 
 tasks.register<JavaExec>("fetchInput") {

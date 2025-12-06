@@ -60,23 +60,25 @@ class Day@@DAY_NUM_PADDED@@Test {
 
     @Test
     fun example_part1() {
-        // replace ??? when you know the expected value
+        // TODO
         assertEquals(0L , Day@@DAY_NUM_PADDED@@.part1(exampleInput1))
     }
 
     @Test
     fun example_part2() {
+        // TODO
         assertEquals(0L , Day@@DAY_NUM_PADDED@@.part2(exampleInput2))
     }
 
     @Test
     fun real_part1() {
-        // once you solved it the first time, paste the answer here
+        // TODO
         assertEquals(0L , Day@@DAY_NUM_PADDED@@.part1(realInput))
     }
 
     @Test
     fun real_part2() {
+        // TODO
         assertEquals(0L , Day@@DAY_NUM_PADDED@@.part2(realInput))
     }
 }
