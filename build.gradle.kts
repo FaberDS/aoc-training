@@ -14,9 +14,8 @@ dependencies {
 }
 
 
-tasks.register<JavaExec>("fetchInput") {
-    // calls aoc.FetchInputKt.main
-    mainClass.set("aoc.FetchInputKt")
+tasks.register<JavaExec>("setupDay") {
+    mainClass.set("aoc.FetchAndSetupAoCDay")
 
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
