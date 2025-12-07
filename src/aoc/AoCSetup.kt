@@ -55,14 +55,15 @@ fun fetchInputAndSave(day: Int, year: Int, sessionCookieValue: String): Boolean 
 
     val inputDir = File("src/$year/input")
     val outputFile = File(inputDir, "day_$dayPadded.txt")
-
+    val env = loadEnvFile(ENV_FILE_PATH)
+    val userAgent = env["AOC_USER_AGENT"] ?: ""
     return try {
         println("Fetching input for Day $day, Year $year...")
 
         val url = URI(urlString).toURL()
         val connection = url.openConnection()
         connection.setRequestProperty("Cookie", "session=$sessionCookieValue")
-
+        connection.setRequestProperty("User-Agent",userAgent)
         val inputStream = connection.getInputStream()
         val scanner = Scanner(inputStream).useDelimiter("\\A")
         val inputContent = if (scanner.hasNext()) scanner.next() else ""
