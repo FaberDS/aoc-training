@@ -11,3 +11,6 @@ fun<T> List<T>.middleValue(): T {
 
 fun List<CharArray>.toDebugString(): String =
     this.joinToString("\n") { it.concatToString() }
+
+fun List<List<Char>>.toDebugStr(): String =
+    this.joinToString("\n") { it.joinToString("") }

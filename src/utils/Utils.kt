@@ -76,7 +76,7 @@ fun splitInputToIntPositionMap(
 /**
  * Splites a list of Strings into a two-dimensional grid of `Char`'s
  */
-fun splitIntoCharGrid(input: List<String>): List<List<Char>> {
+fun splitIntoCharGrid(input: List<String>): MutableList<MutableList<Char>> {
     val grid = mutableListOf<MutableList<Char>>()
     for(line in input) {
         val row = line.toMutableList()
