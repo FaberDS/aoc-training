@@ -41,6 +41,7 @@ fun submitAocAnswer(
 ): AocSubmissionResult {
     val env = loadEnvFile(ENV_FILE_PATH)
     val session = env["AOC_SESSION_COOKIE"] ?: ""
+    val userAgent = env["AOC_USER_AGENT"] ?: ""
     if (session.isBlank()) {
         val msg = "Missing session cookie. Set AOC_SESSION_COOKIE env var or pass sessionCookie."
         println(msg)
@@ -50,10 +51,7 @@ fun submitAocAnswer(
     val url = URL("https://adventofcode.com/$year/day/$day/answer")
     val connection = (url.openConnection() as HttpURLConnection).apply {
         requestMethod = "POST"
-        setRequestProperty(
-            "User-Agent",
-            "aoc-kotlin-helper (https://github.com/yourname/yourrepo)"
-        )
+        setRequestProperty("User-Agent",userAgent)
         setRequestProperty("Cookie", "session=$session")
         doOutput = true
     }
