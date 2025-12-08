@@ -124,5 +124,5 @@ fun main() =
         runPart1 = true,
         runPart2 = true,
         submit1 = false,
-        submit2 = true,
+        submit2 = false,
     )
