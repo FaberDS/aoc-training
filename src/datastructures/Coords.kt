@@ -34,9 +34,9 @@ data class Edge(val a: Coord3D, val b: Coord3D) {
     val dist2: Long = a.distanceToSquare(b)
 }
 
-fun createEdgesForCoords(coords: List<Coord3D>): List<Edge>  =
-    coords.flatMapIndexed { i, a ->
-        coords.drop(i + 1).map { b ->
+fun List<Coord3D>.createEdgesForCoords(): List<Edge>  =
+    this.flatMapIndexed { i, a ->
+        this.drop(i + 1).map { b ->
             Edge(a, b)
         }
     }

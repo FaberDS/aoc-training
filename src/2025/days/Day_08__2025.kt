@@ -5,6 +5,7 @@
 import aoc.AoCDay
 import datastructures.Coord3D
 import datastructures.DSU
+import datastructures.Edge
 import datastructures.createEdgesForCoords
 import datastructures.indexed
 import datastructures.splitInputToCoord3List
@@ -42,18 +43,15 @@ import datastructures.splitInputToCoord3List
  * Continue connecting the closest unconnected pairs of junction boxes together until they're all in the same circuit.
  * What do you get if you multiply together the X coordinates of the last two junction boxes you need to connect?
  *
- *
- *
  */
 
 object Day08 : AoCDay<Long>(
     year = 2025,
     day = 8,
-    // TODO: fill these once you know them
     example1Expected = 40,
     example2Expected = 25272,
     answer1Expected = 54180,
-    answer2Expected = null,
+    answer2Expected = 25325968,
 ) {
     override fun part1(input: List<String>): Long {
         val coords = input.splitInputToCoord3List()
@@ -62,7 +60,7 @@ object Day08 : AoCDay<Long>(
 
         val indexOf: Map<Coord3D, Int> = coords.indexed()
 
-        val edges = createEdgesForCoords(coords)
+        val edges = coords.createEdgesForCoords()
 
         val sortedEdges = edges.sortedBy { it.dist2 }
 
@@ -84,11 +82,36 @@ object Day08 : AoCDay<Long>(
         return answer
     }
 
-
     override fun part2(input: List<String>): Long {
-        var result = 0L
-        // TODO
-        return result
+        val coords = input.splitInputToCoord3List()
+        val n = coords.size
+
+        val indexOf: Map<Coord3D, Int> = coords.indexed()
+
+        val edges = coords.createEdgesForCoords()
+
+        val sortedEdges = edges.sortedBy { it.dist2 }
+
+        val dsu = DSU(n)
+        var components = n
+        var lastEdge: Edge? = null
+
+        for (e in sortedEdges) {
+            val u = indexOf[e.a]!!
+            val v = indexOf[e.b]!!
+
+            if (dsu.union(u, v)) {
+                components--
+                lastEdge = e
+                if (components == 1) break
+            }
+        }
+
+        val le = lastEdge ?: error("Graph never became connected")
+        val x1 = le.a.x.toLong()
+        val x2 = le.b.x.toLong()
+
+        return x1 * x2
     }
 }
 
@@ -99,7 +122,7 @@ fun main() =
         runExamples = true,
         runReal = true,
         runPart1 = true,
-        runPart2 = false,
+        runPart2 = true,
         submit1 = false,
-        submit2 = false,
+        submit2 = true,
     )
