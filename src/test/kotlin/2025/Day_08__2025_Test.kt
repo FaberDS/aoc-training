@@ -23,20 +23,17 @@ class Day08Test {
 
     @Test
     fun example_part1() {
-        // TODO: adjust expected value once known
-        assertEquals(0L, Day08.part1(exampleInput1))
+        assertEquals(40L, Day08.part1(exampleInput1))
     }
 
     @Test
     fun example_part2() {
-        // TODO: adjust expected value once known
-        assertEquals(0L, Day08.part2(exampleInput2))
+        assertEquals(25272L, Day08.part2(exampleInput2))
     }
 
     @Test
     fun real_part1() {
-        // TODO: adjust expected value once known
-        assertEquals(0L, Day08.part1(realInput))
+        assertEquals(54180L, Day08.part1(realInput))
     }
 
     @Test

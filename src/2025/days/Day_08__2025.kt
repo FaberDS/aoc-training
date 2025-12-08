@@ -3,31 +3,94 @@
  * https://adventofcode.com/2025/day/8
  */
 import aoc.AoCDay
-
+import datastructures.Coord3D
+import datastructures.DSU
+import datastructures.Edge
+import datastructures.splitInputToCoord3List
 /**
  *   PART-1
- *   // TODO
+ *   The Elves are trying to figure out which junction boxes to connect so that electricity can reach every junction box. They even have a list of all of the junction boxes' positions in 3D space (your puzzle input).
+ *   This list describes the position of 20 junction boxes, one per line. Each position is given as X,Y,Z coordinates. So, the first junction box in the list is at X=162, Y=817, Z=812.
+ *
+ * To save on string lights, the Elves would like to focus on connecting pairs of junction boxes that are as close together as possible according to straight-line distance. In this example, the two junction boxes which are closest together are 162,817,812 and 425,690,689.
+ *
+ * By connecting these two junction boxes together, because electricity can flow between them, they become part of the same circuit. After connecting them, there is a single circuit which contains two junction boxes, and the remaining 18 junction boxes remain in their own individual circuits.
+ *
+ * Now, the two junction boxes which are closest together but aren't already directly connected are 162,817,812 and 431,825,988. After connecting them, since 162,817,812 is already connected to another junction box, there is now a single circuit which contains three junction boxes and an additional 17 circuits which contain one junction box each.
+ *
+ * The next two junction boxes to connect are 906,360,560 and 805,96,715. After connecting them, there is a circuit containing 3 junction boxes, a circuit containing 2 junction boxes, and 15 circuits which contain one junction box each.
+ *
+ * The next two junction boxes are 431,825,988 and 425,690,689. Because these two junction boxes were already in the same circuit, nothing happens!
+ *
+ * This process continues for a while, and the Elves are concerned that they don't have enough extension cables for all these circuits. They would like to know how big the circuits will be.
+ *
+ * After making the ten shortest connections, there are 11 circuits: one circuit which contains 5 junction boxes, one circuit which contains 4 junction boxes, two circuits which contain 2 junction boxes each, and seven circuits which each contain a single junction box. Multiplying together the sizes of the three largest circuits (5, 4, and one of the circuits of size 2) produces 40.
+ *
+ * Your list contains many junction boxes; connect together the 1000 pairs of junction boxes which are closest together. Afterward, what do you get if you multiply together the sizes of the three largest circuits?
  *
  *   PART-2
- *   // TODO
+ * The Elves were right; they definitely don't have enough extension cables.
+ * You'll need to keep connecting junction boxes together until they're all in one large circuit.
+ *
+ * Continuing the above example, the first connection which causes all of the junction boxes
+ * to form a single circuit is between the junction boxes at 216,146,977 and 117,168,530.
+ * The Elves need to know how far those junction boxes are from the wall so they can pick the right extension cable;
+ * multiplying the X coordinates of those two junction boxes (216 and 117) produces 25272.
+ *
+ * Continue connecting the closest unconnected pairs of junction boxes together until they're all in the same circuit.
+ * What do you get if you multiply together the X coordinates of the last two junction boxes you need to connect?
+ *
+ *
  *
  */
+
 
 object Day08 : AoCDay<Long>(
     year = 2025,
     day = 8,
     // TODO: fill these once you know them
-    example1Expected = null,
-    example2Expected = null,
-    answer1Expected = null,
+    example1Expected = 40,
+    example2Expected = 25272,
+    answer1Expected = 54180,
     answer2Expected = null,
 ) {
-
     override fun part1(input: List<String>): Long {
-        var result = 0L
-        // TODO
-        return result
+        val coords = input.splitInputToCoord3List()
+
+        val pairsToConnect = if (coords.size == 20) 10 else 1000
+
+        val indexOf: Map<Coord3D, Int> =
+            coords.withIndex().associate { (i, c) -> c to i }
+
+        val edges = mutableListOf<Edge>()
+        for (i in coords.indices) {
+            for (j in i + 1 until coords.size) {
+                val a = coords[i]
+                val b = coords[j]
+                edges += Edge(a, b, a.distanceToSquare(b))
+            }
+        }
+
+        val sortedEdges = edges.sortedBy { it.dist2 }
+
+        val dsu = DSU(coords.size)
+
+        for (edge in sortedEdges.take(pairsToConnect)) {
+            val ia = indexOf[edge.a]!!
+            val ib = indexOf[edge.b]!!
+            dsu.union(ia, ib)
+        }
+
+        val sizesDesc = dsu.componentSizes().sortedDescending()
+
+        val answer = sizesDesc
+            .take(3)
+            .map { it.toLong() }
+            .reduce { acc, size -> acc * size }
+
+        return answer
     }
+
 
     override fun part2(input: List<String>): Long {
         var result = 0L
@@ -42,8 +105,8 @@ fun main() =
     Day08.run(
         runExamples = true,
         runReal = false,
-        runPart1 = true,
-        runPart2 = false,
+        runPart1 = false,
+        runPart2 = true,
         submit1 = false,
         submit2 = false,
     )
