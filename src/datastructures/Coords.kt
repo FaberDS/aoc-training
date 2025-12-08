@@ -1,4 +1,6 @@
 package datastructures
+import kotlin.collections.withIndex
+
 data class Coord3D(val x: Int, val y: Int, val z: Int) {
     fun distanceTo(other: Coord3D): Long {
         val (x1, y1, z1) = this
@@ -26,4 +28,15 @@ fun List<String>.splitInputToCoord3List() =
             .map(String::toInt)
         Coord3D(x, y, z)
     }
-data class Edge(val a: Coord3D, val b: Coord3D, val dist2: Long)
+fun <T> List<T>.indexed(): Map<T, Int> = this.withIndex().associate { (i , c ) -> c to i }
+
+data class Edge(val a: Coord3D, val b: Coord3D) {
+    val dist2: Long = a.distanceToSquare(b)
+}
+
+fun createEdgesForCoords(coords: List<Coord3D>): List<Edge>  =
+    coords.flatMapIndexed { i, a ->
+        coords.drop(i + 1).map { b ->
+            Edge(a, b)
+        }
+    }

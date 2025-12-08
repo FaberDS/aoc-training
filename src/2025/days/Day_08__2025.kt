@@ -5,8 +5,10 @@
 import aoc.AoCDay
 import datastructures.Coord3D
 import datastructures.DSU
-import datastructures.Edge
+import datastructures.createEdgesForCoords
+import datastructures.indexed
 import datastructures.splitInputToCoord3List
+
 /**
  *   PART-1
  *   The Elves are trying to figure out which junction boxes to connect so that electricity can reach every junction box. They even have a list of all of the junction boxes' positions in 3D space (your puzzle input).
@@ -44,7 +46,6 @@ import datastructures.splitInputToCoord3List
  *
  */
 
-
 object Day08 : AoCDay<Long>(
     year = 2025,
     day = 8,
@@ -59,17 +60,9 @@ object Day08 : AoCDay<Long>(
 
         val pairsToConnect = if (coords.size == 20) 10 else 1000
 
-        val indexOf: Map<Coord3D, Int> =
-            coords.withIndex().associate { (i, c) -> c to i }
+        val indexOf: Map<Coord3D, Int> = coords.indexed()
 
-        val edges = mutableListOf<Edge>()
-        for (i in coords.indices) {
-            for (j in i + 1 until coords.size) {
-                val a = coords[i]
-                val b = coords[j]
-                edges += Edge(a, b, a.distanceToSquare(b))
-            }
-        }
+        val edges = createEdgesForCoords(coords)
 
         val sortedEdges = edges.sortedBy { it.dist2 }
 
@@ -104,9 +97,9 @@ object Day08 : AoCDay<Long>(
 fun main() =
     Day08.run(
         runExamples = true,
-        runReal = false,
-        runPart1 = false,
-        runPart2 = true,
+        runReal = true,
+        runPart1 = true,
+        runPart2 = false,
         submit1 = false,
         submit2 = false,
     )

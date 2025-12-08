@@ -13,10 +13,10 @@ class DSU(n: Int) {
         return parent[x]
     }
 
-    fun union(a: Int, b: Int) {
+    fun union(a: Int, b: Int): Boolean {
         var ra = find(a)
         var rb = find(b)
-        if (ra == rb) return
+        if (ra == rb) return false
 
         if (size[ra] < size[rb]) {
             val tmp = ra
@@ -25,6 +25,7 @@ class DSU(n: Int) {
         }
         parent[rb] = ra
         size[ra] += size[rb]
+        return true
     }
 
     fun componentSizes(): List<Int> {
