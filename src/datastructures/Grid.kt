@@ -34,7 +34,7 @@ open class Grid<T>(
 }
 
 
-class IntGridFromString(input: String) : Grid<Int>(
+open class IntGridFromString(input: String) : Grid<Int>(
     input.lines()
         .filter { it.isNotBlank() }
         .map { line ->
@@ -46,6 +46,8 @@ class IntGridFromString(input: String) : Grid<Int>(
 ) {
     override fun isEmptyValue(value: Int): Boolean = value == 0
 }
+
+
 
 class CharGridFromString(lines: List<String>) : Grid<Char>(
     lines

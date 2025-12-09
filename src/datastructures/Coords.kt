@@ -19,7 +19,14 @@ data class Coord3D(val x: Int, val y: Int, val z: Int) {
         return dx * dx + dy * dy + dz * dz
     }
 }
-
+fun List<String>.splitInputToCoordList() =
+    this.map { line ->
+        val (x,y) = line
+            .split(',')
+            .filter(String::isNotBlank)
+            .map(String::toInt)
+        Coord(x, y)
+    }
 fun List<String>.splitInputToCoord3List() =
     this.map { line ->
         val (x,y,z) = line
