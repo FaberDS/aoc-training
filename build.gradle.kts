@@ -12,20 +12,32 @@ sourceSets {
 
         resources.srcDir("src/main/resources")
     }
-    test{
+    test {
         kotlin.srcDir("test")
     }
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("test"))
+repositories {
+    mavenCentral()
 }
 
+dependencies {
+    implementation(kotlin("stdlib"))
+    testImplementation(kotlin("test"))
 
+    // Use TurnKey Z3 that bundles native libs for macOS/Windows/Linux
+    implementation("tools.aqua:z3-turnkey:4.12.2")
+}
+
+// You no longer need to tweak java.library.path, so remove this:
+//// val z3LibDir = "$projectDir/lib/z3"
+//// tasks.withType<JavaExec>().configureEach {
+////     jvmArgs("-Djava.library.path=$z3LibDir")
+//// }
+
+// Keep your JavaExec tasks as they were:
 tasks.register<JavaExec>("setupDay") {
     mainClass.set("aoc.FetchAndSetupAoCDayKt")
-
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 
@@ -37,9 +49,7 @@ tasks.register<JavaExec>("setupDay") {
 }
 
 tasks.register<JavaExec>("createDayFiles") {
-    // calls aoc.CreateDayFilesKt.main
     mainClass.set("aoc.CreateDayFilesKt")
-
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
 
