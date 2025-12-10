@@ -4,52 +4,73 @@
  */
 import aoc.AoCDay
 import extensions.allSubsets
-import extensions.diffIndices
-import extensions.flip
+import utils.Machine
+import utils.minPressesForMachine
 import kotlin.text.split
 
-/**
- *   PART-1
- *
- *   PART-2
- *   // TODO
- *
- */
+private fun parseButton(line: String): List<List<Int>> =
+    Regex("""\(([^)]*)\)""").findAll(line)
+        .map { match ->
+            val inner = match.groupValues[1].trim()
+            if (inner.isEmpty()) {
+                emptyList()
+            } else {
+                inner.split(',')
+                    .map { it.trim().toInt() }
+            }
+        }.toList()
 
+fun parseMachine(line: String): Machine {
+    val targetMatch = Regex("""\{([^}]*)\}""").find(line)
+        ?: error("No targets found in line: $line")
+
+    val targets = targetMatch.groupValues[1]
+        .split(',')
+        .filter { it.isNotBlank() }
+        .map { it.trim().toInt() }
+        .toIntArray()
+
+    val buttons = parseButton(line)
+
+    return Machine(
+        targets = targets,
+        buttons = buttons
+    )
+}
 
 fun calculateButtonTaps(targetIndicatorLight: List<Boolean>, buttons: List<List<Int>>): Long {
-    var taps = 0L
 
-    var minValue = Long.MAX_VALUE
+    var minTaps = Long.MAX_VALUE
     val buttonCombinations = buttons.allSubsets()
 
-    for( buttonSet in buttonCombinations) {
-        val indicatorLight = MutableList<Boolean>(targetIndicatorLight.count()){false}
-        taps = 0L
-        for(bs in buttonSet) {
-            taps ++
-            for(b in bs) {
-                indicatorLight.flip(b)
+    for (buttonSet in buttonCombinations) {
+        val indicatorLight = MutableList(targetIndicatorLight.size) { false }
+        var taps = 0L
+
+        for (bs in buttonSet) {
+            taps++
+            if (taps >= minTaps) break
+
+            for (b in bs) {
+                indicatorLight[b] = !indicatorLight[b]
             }
         }
-        val c = diffIndices(targetIndicatorLight, indicatorLight)
-        val match = c.isEmpty()
-        if(match) {
-            if (taps < minValue){
-                minValue = taps
-            }
+
+        if (taps >= minTaps) continue
+        if (indicatorLight == targetIndicatorLight && taps < minTaps) {
+            minTaps = taps
         }
     }
-    return minValue
+
+    return minTaps
 }
 object Day10 : AoCDay<Long>(
     year = 2025,
     day = 10,
-    // TODO: fill these once you know them
     example1Expected = 7,
-    example2Expected = null,
+    example2Expected = 33,
     answer1Expected = 385, // 91,165,385
-    answer2Expected = null,
+    answer2Expected = 16757,
 ) {
     val regexP = Regex("""[\(\)]""")
     val regex = Regex("""(?:\[([\.#]*)\]) ((?:\(\d(?:\,\d)*\) )*)""")
@@ -78,8 +99,11 @@ object Day10 : AoCDay<Long>(
     }
 
     override fun part2(input: List<String>): Long {
-        var result = 0L
-        // TODO
+        val result = input
+            .filter { it.isNotBlank() }
+            .map(::parseMachine)
+            .sumOf(::minPressesForMachine).toLong()
+        println("Part 2: $result")
         return result
     }
 }
@@ -89,8 +113,8 @@ object Day10 : AoCDay<Long>(
 fun main() =
     Day10.run(
         runExamples = true,
-        runReal = false,
-        runPart1 = false,
+        runReal = true,
+        runPart1 = true,
         runPart2 = true,
         submit1 = false,
         submit2 = false,
