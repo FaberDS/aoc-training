@@ -23,8 +23,7 @@ class Day11Test {
 
     @Test
     fun example_part1() {
-        // TODO: adjust expected value once known
-        assertEquals(0L, Day11.part1(exampleInput1))
+        assertEquals(5L, Day11.part1(exampleInput1))
     }
 
     @Test
@@ -35,8 +34,7 @@ class Day11Test {
 
     @Test
     fun real_part1() {
-        // TODO: adjust expected value once known
-        assertEquals(0L, Day11.part1(realInput))
+        assertEquals(613L, Day11.part1(realInput))
     }
 
     @Test
