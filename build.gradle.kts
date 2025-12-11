@@ -25,17 +25,9 @@ dependencies {
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
 
-    // Use TurnKey Z3 that bundles native libs for macOS/Windows/Linux
     implementation("tools.aqua:z3-turnkey:4.12.2")
 }
 
-// You no longer need to tweak java.library.path, so remove this:
-//// val z3LibDir = "$projectDir/lib/z3"
-//// tasks.withType<JavaExec>().configureEach {
-////     jvmArgs("-Djava.library.path=$z3LibDir")
-//// }
-
-// Keep your JavaExec tasks as they were:
 tasks.register<JavaExec>("setupDay") {
     mainClass.set("aoc.FetchAndSetupAoCDayKt")
     classpath = sourceSets["main"].runtimeClasspath
